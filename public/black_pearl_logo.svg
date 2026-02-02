@@ -1,0 +1,41 @@
+<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="400" height="400" fill="#ffffff"/>
+  
+  <!-- Pearl with gradient -->
+  <defs>
+    <radialGradient id="pearlGradient" cx="40%" cy="40%">
+      <stop offset="0%" style="stop-color:#4a4a4a;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#2a2a2a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#0a0a0a;stop-opacity:1" />
+    </radialGradient>
+    
+    <radialGradient id="shineGradient" cx="30%" cy="30%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Main pearl circle -->
+  <circle cx="200" cy="160" r="70" fill="url(#pearlGradient)"/>
+  
+  <!-- Pearl shine effect -->
+  <circle cx="180" cy="145" r="25" fill="url(#shineGradient)"/>
+  
+  <!-- Smaller highlight -->
+  <circle cx="185" cy="150" r="12" fill="#ffffff" opacity="0.6"/>
+  
+  <!-- Brand name -->
+  <text x="200" y="280" 
+        font-family="Georgia, serif" 
+        font-size="42" 
+        font-weight="bold"
+        text-anchor="middle" 
+        fill="#1a1a1a"
+        letter-spacing="2">BLACK PEARL</text>
+  
+  <!-- Decorative underline -->
+  <line x1="80" y1="295" x2="320" y2="295" 
+        stroke="#1a1a1a" 
+        stroke-width="1.5"/>
+</svg>

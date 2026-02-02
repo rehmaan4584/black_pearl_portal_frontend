@@ -1,0 +1,226 @@
+<svg viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Enhanced Gold Gradient with shine -->
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffd700;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#ffed4e;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#d4af37;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#ffed4e;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffd700;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Bright Rose Gold -->
+    <linearGradient id="roseGoldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffb6c1;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ff69b4;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ffb6c1;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Pearl with enhanced shine -->
+    <radialGradient id="pearlGradient" cx="30%" cy="30%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="40%" style="stop-color:#fffef7;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#f5f5f5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#e8e8e8;stop-opacity:1" />
+    </radialGradient>
+    
+    <!-- Vibrant Diamond/Gem -->
+    <radialGradient id="gemGradient" cx="30%" cy="30%">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#ffb3ff;stop-opacity:1" />
+      <stop offset="60%" style="stop-color:#ff1493;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#c71585;stop-opacity:1" />
+    </radialGradient>
+    
+    <!-- Shine effect -->
+    <radialGradient id="shineGradient">
+      <stop offset="0%" style="stop-color:#ffffff;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#ffffff;stop-opacity:0" />
+    </radialGradient>
+    
+    <!-- Fabric Gradient -->
+    <linearGradient id="fabricGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f0e6fa;stop-opacity:0.4" />
+      <stop offset="100%" style="stop-color:#e8d4f0;stop-opacity:0.4" />
+    </linearGradient>
+    
+    <!-- Glow filter for jewelry -->
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    
+    <!-- Strong glow for gems -->
+    <filter id="strongGlow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+  
+  <!-- Background circle -->
+  <circle cx="300" cy="300" r="280" fill="#fdfbf7" opacity="0.6"/>
+  
+  <!-- Decorative circles with gold tint -->
+  <circle cx="300" cy="300" r="240" fill="none" stroke="#d4af37" stroke-width="1.5" opacity="0.5"/>
+  <circle cx="300" cy="300" r="200" fill="none" stroke="#ffd700" stroke-width="1" opacity="0.4"/>
+  
+  <!-- Elegant woman silhouette with jewelry -->
+  <g transform="translate(300, 280)">
+    <!-- Head -->
+    <ellipse cx="0" cy="-80" rx="45" ry="55" fill="#f5e6d3" opacity="0.95"/>
+    
+    <!-- Hair bun -->
+    <ellipse cx="0" cy="-115" rx="35" ry="25" fill="#8b6f47" opacity="0.9"/>
+    
+    <!-- Hair ornament - golden -->
+    <circle cx="0" cy="-115" r="8" fill="url(#goldGradient)" filter="url(#glow)"/>
+    <circle cx="0" cy="-115" r="3" fill="#ffed4e"/>
+    
+    <!-- Neck -->
+    <path d="M -15,-40 L -15,-10 L 15,-10 L 15,-40" fill="#f5e6d3" opacity="0.95"/>
+    
+    <!-- Necklace - Enhanced with glow -->
+    <ellipse cx="0" cy="-12" rx="25" ry="8" fill="none" stroke="url(#goldGradient)" stroke-width="4" filter="url(#glow)"/>
+    
+    <!-- Multiple pearl beads on necklace -->
+    <circle cx="-18" cy="-10" r="3" fill="url(#pearlGradient)"/>
+    <circle cx="-12" cy="-11" r="3" fill="url(#pearlGradient)"/>
+    <circle cx="-6" cy="-12" r="3" fill="url(#pearlGradient)"/>
+    <circle cx="0" cy="-12" r="3" fill="url(#pearlGradient)"/>
+    <circle cx="6" cy="-12" r="3" fill="url(#pearlGradient)"/>
+    <circle cx="12" cy="-11" r="3" fill="url(#pearlGradient)"/>
+    <circle cx="18" cy="-10" r="3" fill="url(#pearlGradient)"/>
+    
+    <!-- Pendant - Large gem with strong glow -->
+    <path d="M 0,-11 L -6,-5 L 0,4 L 6,-5 Z" fill="url(#gemGradient)" filter="url(#strongGlow)"/>
+    <circle cx="0" cy="-5" r="7" fill="url(#gemGradient)" filter="url(#strongGlow)"/>
+    <!-- Shine on gem -->
+    <circle cx="-2" cy="-7" r="3" fill="#ffffff" opacity="0.8"/>
+    <path d="M 0,-9 L -3,-5 L 0,-1 L 3,-5 Z" fill="#ffb3ff" opacity="0.6"/>
+    
+    <!-- Shoulder/dress suggestion -->
+    <path d="M -15,-10 Q -40,20 -60,60 L -40,80 Q -20,40 -15,0 Z" fill="url(#roseGoldGradient)" opacity="0.7"/>
+    <path d="M 15,-10 Q 40,20 60,60 L 40,80 Q 20,40 15,0 Z" fill="url(#roseGoldGradient)" opacity="0.7"/>
+    
+    <!-- Dress bodice -->
+    <path d="M -15,0 L -40,80 L 40,80 L 15,0 Z" fill="url(#fabricGradient)"/>
+    <path d="M -15,0 L -40,80 L 40,80 L 15,0 Z" fill="none" stroke="#e8d4f0" stroke-width="1.5" opacity="0.6"/>
+    
+    <!-- Golden decorative dress details -->
+    <line x1="-25" y1="20" x2="25" y2="20" stroke="url(#goldGradient)" stroke-width="2" opacity="0.7"/>
+    <circle cx="0" cy="20" r="4" fill="url(#gemGradient)" filter="url(#glow)"/>
+    <line x1="-30" y1="40" x2="30" y2="40" stroke="url(#goldGradient)" stroke-width="1.5" opacity="0.6"/>
+    <line x1="-35" y1="60" x2="35" y2="60" stroke="url(#goldGradient)" stroke-width="1.5" opacity="0.5"/>
+  </g>
+  
+  <!-- Floating jewelry elements with enhanced shine -->
+  
+  <!-- Pearl earring 1 - Left -->
+  <g transform="translate(150, 200)" filter="url(#glow)">
+    <line x1="0" y1="-15" x2="0" y2="-5" stroke="url(#goldGradient)" stroke-width="3"/>
+    <circle cx="0" cy="0" r="14" fill="url(#pearlGradient)"/>
+    <circle cx="-4" cy="-4" r="5" fill="#ffffff" opacity="0.7"/>
+    <circle cx="-2" cy="-2" r="3" fill="#ffffff" opacity="0.9"/>
+  </g>
+  
+  <!-- Pearl earring 2 - Right -->
+  <g transform="translate(450, 200)" filter="url(#glow)">
+    <line x1="0" y1="-15" x2="0" y2="-5" stroke="url(#goldGradient)" stroke-width="3"/>
+    <circle cx="0" cy="0" r="14" fill="url(#pearlGradient)"/>
+    <circle cx="-4" cy="-4" r="5" fill="#ffffff" opacity="0.7"/>
+    <circle cx="-2" cy="-2" r="3" fill="#ffffff" opacity="0.9"/>
+  </g>
+  
+  <!-- Ring - Enhanced -->
+  <g transform="translate(120, 400)" filter="url(#glow)">
+    <ellipse cx="0" cy="0" rx="22" ry="7" fill="none" stroke="url(#goldGradient)" stroke-width="4"/>
+    <path d="M -9,-7 L -7,-22 L 7,-22 L 9,-7" fill="url(#goldGradient)"/>
+    <circle cx="0" cy="-24" r="10" fill="url(#gemGradient)" filter="url(#strongGlow)"/>
+    <path d="M 0,-30 L -6,-24 L 0,-18 L 6,-24 Z" fill="#ff69b4" opacity="0.7"/>
+    <circle cx="-2" cy="-26" r="4" fill="#ffffff" opacity="0.8"/>
+  </g>
+  
+  <!-- Bracelet - Enhanced with more pearls -->
+  <g transform="translate(480, 420)" filter="url(#glow)">
+    <ellipse cx="0" cy="0" rx="32" ry="11" fill="none" stroke="url(#roseGoldGradient)" stroke-width="4"/>
+    <circle cx="-24" cy="-2" r="5" fill="url(#pearlGradient)"/>
+    <circle cx="-16" cy="0" r="5" fill="url(#pearlGradient)"/>
+    <circle cx="-8" cy="2" r="5" fill="url(#pearlGradient)"/>
+    <circle cx="0" cy="3" r="5" fill="url(#pearlGradient)"/>
+    <circle cx="8" cy="2" r="5" fill="url(#pearlGradient)"/>
+    <circle cx="16" cy="0" r="5" fill="url(#pearlGradient)"/>
+    <circle cx="24" cy="-2" r="5" fill="url(#pearlGradient)"/>
+    <!-- Shine on pearls -->
+    <circle cx="-24" cy="-4" r="2" fill="#ffffff" opacity="0.7"/>
+    <circle cx="-8" cy="0" r="2" fill="#ffffff" opacity="0.7"/>
+    <circle cx="8" cy="0" r="2" fill="#ffffff" opacity="0.7"/>
+    <circle cx="24" cy="-4" r="2" fill="#ffffff" opacity="0.7"/>
+  </g>
+  
+  <!-- Enhanced sparkles with glow -->
+  <g filter="url(#glow)">
+    <!-- Top left sparkle -->
+    <path d="M 100,150 L 103,157 L 110,160 L 103,163 L 100,170 L 97,163 L 90,160 L 97,157 Z" fill="#ffd700"/>
+    <circle cx="100" cy="160" r="3" fill="#ffed4e"/>
+    
+    <!-- Top right sparkle -->
+    <path d="M 500,150 L 503,157 L 510,160 L 503,163 L 500,170 L 497,163 L 490,160 L 497,157 Z" fill="#ffd700"/>
+    <circle cx="500" cy="160" r="3" fill="#ffed4e"/>
+    
+    <!-- Bottom left sparkle -->
+    <path d="M 180,480 L 183,487 L 190,490 L 183,493 L 180,500 L 177,493 L 170,490 L 177,487 Z" fill="#ff69b4"/>
+    <circle cx="180" cy="490" r="3" fill="#ffb3ff"/>
+    
+    <!-- Bottom right sparkle -->
+    <path d="M 420,480 L 423,487 L 430,490 L 423,493 L 420,500 L 417,493 L 410,490 L 417,487 Z" fill="#ff69b4"/>
+    <circle cx="420" cy="490" r="3" fill="#ffb3ff"/>
+    
+    <!-- Top center sparkle -->
+    <path d="M 300,100 L 304,110 L 314,114 L 304,118 L 300,128 L 296,118 L 286,114 L 296,110 Z" fill="#ffb6c1"/>
+    <circle cx="300" cy="114" r="4" fill="#ffffff" opacity="0.8"/>
+  </g>
+  
+  <!-- Additional scattered gold sparkles -->
+  <g opacity="0.8" filter="url(#glow)">
+    <circle cx="130" cy="250" r="3" fill="#ffd700"/>
+    <circle cx="470" cy="280" r="3" fill="#ffd700"/>
+    <circle cx="220" cy="140" r="2.5" fill="#ffed4e"/>
+    <circle cx="380" cy="130" r="2.5" fill="#ffed4e"/>
+    <circle cx="150" cy="360" r="2.5" fill="#ff69b4"/>
+    <circle cx="450" cy="370" r="2.5" fill="#ff69b4"/>
+  </g>
+  
+  <!-- Enhanced floral embellishments with gold centers -->
+  <g transform="translate(80, 280)" opacity="0.6" filter="url(#glow)">
+    <circle cx="0" cy="0" r="4" fill="#ff69b4"/>
+    <circle cx="8" cy="0" r="4" fill="#ff69b4"/>
+    <circle cx="4" cy="-6" r="4" fill="#ff69b4"/>
+    <circle cx="4" cy="6" r="4" fill="#ff69b4"/>
+    <circle cx="-3" cy="-4" r="4" fill="#ff69b4"/>
+    <circle cx="11" cy="-4" r="4" fill="#ff69b4"/>
+    <circle cx="4" cy="0" r="3" fill="#ffd700"/>
+  </g>
+  
+  <g transform="translate(520, 320)" opacity="0.6" filter="url(#glow)">
+    <circle cx="0" cy="0" r="4" fill="#ffb6c1"/>
+    <circle cx="8" cy="0" r="4" fill="#ffb6c1"/>
+    <circle cx="4" cy="-6" r="4" fill="#ffb6c1"/>
+    <circle cx="4" cy="6" r="4" fill="#ffb6c1"/>
+    <circle cx="-3" cy="-4" r="4" fill="#ffb6c1"/>
+    <circle cx="11" cy="-4" r="4" fill="#ffb6c1"/>
+    <circle cx="4" cy="0" r="3" fill="#ffd700"/>
+  </g>
+  
+  <!-- Shine beams -->
+  <g opacity="0.15">
+    <line x1="300" y1="150" x2="300" y2="100" stroke="#ffd700" stroke-width="2"/>
+    <line x1="320" y1="160" x2="340" y2="120" stroke="#ffd700" stroke-width="1.5"/>
+    <line x1="280" y1="160" x2="260" y2="120" stroke="#ffd700" stroke-width="1.5"/>
+  </g>
+</svg>
