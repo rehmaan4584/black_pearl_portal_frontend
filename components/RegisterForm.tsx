@@ -1,9 +1,9 @@
 "use client";
 
 import { apiRequest } from "@/lib/api";
-import { Input } from "./input";
-import { Button } from "./button";
-import { useState } from "react";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { useRouter } from 'next/navigation'; 
 import Image from "next/image";
 import { useForm } from "react-hook-form";
 export function RegisterForm() {
@@ -12,6 +12,8 @@ export function RegisterForm() {
     email: string;
     password: string;
   };
+
+  const router = useRouter();
 
   const {
     register,
@@ -22,7 +24,7 @@ export function RegisterForm() {
   const onSubmit = async (data: RegisterFormData) => {
     try {
       const res = await apiRequest("auth/register","POST",data);
-      console.log('api called');
+      router.push('/login');
       console.log(res);
     } catch (error:any) {
       console.error(error);

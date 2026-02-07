@@ -5,7 +5,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="h-full">
+    <html lang="en">
       <body className="h-screen flex">
         <div className="w-1/2 flex items-center justify-center p-8">
           {children}

@@ -1,0 +1,81 @@
+"use client";
+
+import { apiRequest } from "@/lib/api";
+import { Input } from "./ui/input";
+import { Button } from "./ui/button";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { useForm } from "react-hook-form";
+export function LoginForm() {
+  type LoginFormData = {
+    email: string;
+    password: string;
+  };
+
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<LoginFormData>();
+
+  const onSubmit = async (data: LoginFormData) => {
+    try {
+      const res = await apiRequest("auth/login","POST",data);
+      const token = res?.token;
+      localStorage.setItem("token",token);
+      if(token){
+        router.push('/dashboard');
+      }
+    } catch (error:any) {
+      console.error(error);
+      throw new Error(error?.message);
+    }
+  };
+
+  return (
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      action=""
+      className="flex flex-col gap-4 w-96 p-6 bg-white text-[#2A1E0F] rounded-xl border border-[#E6C98A] shadow-[0_10px_30px_rgba(212,175,55,0.25)]"
+    >
+      <div>
+        <Image
+          src="/black_pearl_logo.svg"
+          alt="brand logo"
+          width={83}
+          height={40}
+        />
+      </div>
+
+      <label htmlFor="email">Email</label>
+      <Input
+        id="email"
+        {...register("email", { required: "Email required" })}
+      />
+      {errors.email && (
+        <span style={{ color: "red", fontSize: "0.875rem" }}>
+          {errors.email.message}
+        </span>
+      )}
+      <label htmlFor="password">Password</label>
+      <Input
+        id="password"
+        type="password"
+        {...register("password", { required: "Password required" })}
+      />
+      {errors.password && (
+        <span style={{ color: "red", fontSize: "0.875rem" }}>
+          {errors.password.message}
+        </span>
+      )}
+      <Button
+        variant="outline"
+        className="bg-white text-black rounded-1 mt-1 p-1"
+        type="submit"
+      >
+        Submit
+      </Button>
+    </form>
+  );
+}
