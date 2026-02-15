@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation';
 import { apiRequest } from "@/lib/api";
 import {
   Table,
@@ -38,6 +39,7 @@ type Product = {
 };
 
 export default function Products() {
+  const router = useRouter();
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
@@ -71,6 +73,10 @@ export default function Products() {
       if (primary) return primary.url;
     }
     return variants[0]?.images[0]?.url || "/placeholder.png";
+  };
+
+   const handleEdit = (productId: number) => {
+    router.push(`/products/edit/${productId}`);
   };
 
   const openModal = (product: Product) => {
@@ -134,7 +140,7 @@ export default function Products() {
                   >
                     <Eye className="w-4 h-4" />
                   </Button>
-                  <Button size="sm" variant="ghost">
+                  <Button size="sm" variant="ghost" onClick={() => handleEdit(product.id)}>
                     <Pencil className="w-4 h-4" />
                   </Button>
                   <Button size="sm" variant="ghost">
