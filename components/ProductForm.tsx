@@ -1,10 +1,10 @@
 "use client";
 import { useRouter } from "next/navigation";
+import { useProductForm } from "@/hooks/useProductForm";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -20,225 +20,30 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useForm, useFieldArray, Controller } from "react-hook-form";
+import { Controller } from "react-hook-form";
 import { Trash2, Plus, Upload } from "lucide-react";
-import { apiRequest, apiUpload } from "@/lib/api";
-
-type ProductFormData = {
-  // Product fields
-  title: string;
-  description: string;
-  type: string;
-  gender: string;
-  brand?: string;
-
-  // Variants array
-  variants: {
-    id: number;
-    size: string;
-    color: string;
-    price: number;
-    images: File[];
-  }[];
-};
 
 interface ProductFormProps {
-  productId?: number; // Optional prop
+  productId?: number;
 }
 
 export default function ProductForm({ productId }: ProductFormProps) {
   const router = useRouter();
-  const isEditMode = !!productId;
+
   const {
     register,
     handleSubmit,
     control,
-    watch,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm<ProductFormData>({
-    defaultValues: {
-      variants: [{ size: "", color: "", price: 0, images: [] }],
-    },
-  });
-
-  const { fields, append, remove } = useFieldArray({
-    control,
-    name: "variants",
-  });
-
-  // Add this useEffect after your existing useForm setup
-  useEffect(() => {
-    if (isEditMode) {
-      fetchProductData();
-    }
-  }, [productId]);
-
-  const fetchProductData = async () => {
-    try {
-      const product = await apiRequest(`products/details/${productId}`, "GET");
-
-      // Form ko pre-fill karo
-      reset({
-        title: product.title,
-        description: product.description,
-        type: product.type,
-        gender: product.gender,
-        brand: product.brand,
-        variants: product.variants.map((v: any) => ({
-          id: v.id, // Important: ID save karo
-          size: v.size,
-          color: v.color,
-          price: v.price,
-          images: v.images.map((img: any) => img.url),
-        })),
-      });
-    } catch (error) {
-      console.error("Error fetching product:", error);
-      alert("Failed to load product data");
-    }
-  };
-
-  // Check if form is valid for submission
-  const formValues = watch();
-  const isFormValid =
-    formValues.title &&
-    formValues.description &&
-    formValues.type &&
-    formValues.gender &&
-    formValues.variants?.length > 0 &&
-    formValues.variants.every(
-      (v) => v.size && v.color && v.price > 0 && v.images?.length > 0,
-    );
-
-  const onSubmit = async (data: ProductFormData) => {
-    try {
-      if (isEditMode) {
-        // ========================================
-        // EDIT MODE - Update existing product
-        // ========================================
-
-        // Step 1: Update Product
-        await apiRequest(
-          `products/update-product-with-variant/${productId}`,
-          "PUT",
-          {
-            title: data.title,
-            description: data.description,
-            type: data.type,
-            gender: data.gender,
-            brand: data.brand,
-          },
-        );
-
-        // Step 2: Update/Create Variants with Images
-        for (const variant of data.variants) {
-          if (variant.id) {
-            // Update existing variant
-            await apiRequest(`product-variant/update/${variant.id}`, "PUT", {
-              size: variant.size,
-              color: variant.color,
-              price: variant.price,
-            });
-
-            // Handle images for existing variant
-            // Option 1: Delete old images and upload new ones
-            // await apiRequest(`product-variant-image/delete-by-variant/${variant.id}`, "DELETE");
-
-            // Upload new/updated images
-            for (let i = 0; i < variant.images.length; i++) {
-              const image = variant.images[i];
-
-              // Check if it's a new File (not existing URL string)
-              if (image instanceof File) {
-                const formData = new FormData();
-                formData.append("file", image);
-                formData.append("productVariantId", variant.id.toString());
-                formData.append("isPrimary", i === 0 ? "true" : "false");
-                formData.append("sortOrder", i.toString());
-
-                await apiUpload("product-variant-image/create", formData);
-              }
-              // If it's a string (existing URL), skip upload
-            }
-          } else {
-            // Create new variant
-            const createdVariant = await apiRequest(
-              "product-variant/create",
-              "POST",
-              {
-                productId: productId,
-                size: variant.size,
-                color: variant.color,
-                price: variant.price,
-              },
-            );
-
-            // Upload images for new variant
-            for (let i = 0; i < variant.images.length; i++) {
-              const formData = new FormData();
-              formData.append("file", variant.images[i] as File);
-              formData.append("productVariantId", createdVariant.id.toString());
-              formData.append("isPrimary", i === 0 ? "true" : "false");
-              formData.append("sortOrder", i.toString());
-
-              await apiUpload("product-variant-image/create", formData);
-            }
-          }
-        }
-
-        alert("Product updated successfully!");
-        router.push("/products");
-      } else {
-        // ========================================
-        // CREATE MODE - Create new product
-        // ========================================
-
-        // Step 1: Create Product
-        const product = await apiRequest("products/create", "POST", {
-          title: data.title,
-          description: data.description,
-          type: data.type,
-          gender: data.gender,
-          brand: data.brand,
-        });
-
-        // Step 2: Create Variants with Images
-        for (const variant of data.variants) {
-          // Create Variant
-          const createdVariant = await apiRequest(
-            "product-variant/create",
-            "POST",
-            {
-              productId: product.id,
-              size: variant.size,
-              color: variant.color,
-              price: variant.price,
-            },
-          );
-
-          // Upload Images
-          for (let i = 0; i < variant.images.length; i++) {
-            const formData = new FormData();
-            formData.append("file", variant.images[i] as File);
-            formData.append("productVariantId", createdVariant.id.toString());
-            formData.append("isPrimary", i === 0 ? "true" : "false");
-            formData.append("sortOrder", i.toString());
-
-            await apiUpload("product-variant-image/create", formData);
-          }
-        }
-
-        alert("Product created successfully!");
-        router.push("/products");
-      }
-    } catch (error: any) {
-      console.error("Error:", error);
-      alert(
-        `Failed to ${isEditMode ? "update" : "create"} product: ${error.message}`,
-      );
-    }
-  };
+    errors,
+    fields,
+    append,
+    remove,
+    onSubmit,
+    isSubmitting,
+    isFormValid,
+    isEditMode, 
+    formValues,
+  } = useProductForm(productId);
   return (
     <div className="h-full overflow-y-auto">
       <div className="max-w-5xl mx-auto p-6 space-y-6">
@@ -540,42 +345,57 @@ export default function ProductForm({ productId }: ProductFormProps) {
                                 {value && value.length > 0 && (
                                   <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                                     {value.map(
-                                      (file: File, imgIndex: number) => (
-                                        <div
-                                          key={imgIndex}
-                                          className="relative group"
-                                        >
-                                          <img
-                                            src={URL.createObjectURL(file)}
-                                            alt={`Preview ${imgIndex + 1}`}
-                                            className="w-full h-24 object-cover rounded border"
-                                          />
-                                          {imgIndex === 0 && (
-                                            <span className="absolute top-1 left-1 bg-primary text-primary-foreground text-xs px-1 rounded">
-                                              Primary
-                                            </span>
-                                          )}
-                                          <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded flex items-center justify-center">
-                                            <Button
-                                              type="button"
-                                              size="sm"
-                                              variant="destructive"
-                                              onClick={() => {
-                                                const newFiles = value.filter(
-                                                  (_: File, i: number) =>
-                                                    i !== imgIndex,
-                                                );
-                                                onChange(newFiles);
-                                              }}
-                                            >
-                                              <Trash2 className="w-4 h-4" />
-                                            </Button>
+                                      (
+                                        file: File | string,
+                                        imgIndex: number,
+                                      ) => {
+                                        // Handle both File and string URL
+                                        const imageUrl =
+                                          file instanceof File
+                                            ? URL.createObjectURL(file)
+                                            : file;
+
+                                        return (
+                                          <div
+                                            key={imgIndex}
+                                            className="relative group"
+                                          >
+                                            <img
+                                              src={imageUrl}
+                                              alt={`Preview ${imgIndex + 1}`}
+                                              className="w-full h-24 object-cover rounded border"
+                                            />
+                                            {imgIndex === 0 && (
+                                              <span className="absolute top-1 left-1 bg-primary text-primary-foreground text-xs px-1 rounded">
+                                                Primary
+                                              </span>
+                                            )}
+                                            <div className="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity rounded flex items-center justify-center">
+                                              <Button
+                                                type="button"
+                                                size="sm"
+                                                variant="destructive"
+                                                onClick={() => {
+                                                  const newFiles = value.filter(
+                                                    (
+                                                      _: File | string,
+                                                      i: number,
+                                                    ) => i !== imgIndex,
+                                                  );
+                                                  onChange(newFiles);
+                                                }}
+                                              >
+                                                <Trash2 className="w-4 h-4" />
+                                              </Button>
+                                            </div>
+                                            <p className="text-xs text-center mt-1 truncate">
+                                              {file instanceof File
+                                                ? file.name
+                                                : "Existing image"}
+                                            </p>
                                           </div>
-                                          <p className="text-xs text-center mt-1 truncate">
-                                            {file.name}
-                                          </p>
-                                        </div>
-                                      ),
+                                        );
+                                      },
                                     )}
                                   </div>
                                 )}
