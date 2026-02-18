@@ -1,13 +1,14 @@
+
 export type ProductFormData = {
   title: string;
   description: string;
-  type: string;
+  subCategoryId: number;
   gender: string;
   brand?: string;
   variants: {
     id: number;
-    size: string;
-    color: string;
+    sizeId: number;
+    colorId: number;
     price: number;
     images: (File | string)[];
   }[];

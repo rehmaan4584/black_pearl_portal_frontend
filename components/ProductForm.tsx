@@ -108,35 +108,38 @@ export default function ProductForm({ productId }: ProductFormProps) {
                     )}
                   </div>
 
-                  {/* Type & Gender */}
+
+                  {/* Category & SubCategory */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
-                      <Label htmlFor="type">
-                        Type <span className="text-red-500">*</span>
+                      <Label htmlFor="subCategoryId">
+                        Subcategory <span className="text-red-500">*</span>
                       </Label>
                       <Controller
-                        name="type"
+                        name="subCategoryId"
                         control={control}
-                        rules={{ required: "Type is required" }}
+                        rules={{ required: "Subcategory is required" }}
                         render={({ field }) => (
                           <Select
                             onValueChange={field.onChange}
-                            defaultValue={field.value}
+                            defaultValue={field.value ? String(field.value) : undefined}
                           >
                             <SelectTrigger>
-                              <SelectValue placeholder="Select type" />
+                              <SelectValue placeholder="Select subcategory" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="JEANS">Jeans</SelectItem>
-                              <SelectItem value="KNICKERS">Knickers</SelectItem>
-                              <SelectItem value="SHIRTS">Shirts</SelectItem>
+                              {/* TODO: Map subcategories fetched from backend */}
+                              {/* Example: */}
+                              {/* subCategories.map((sub) => (
+                                <SelectItem key={sub.id} value={String(sub.id)}>{sub.name}</SelectItem>
+                              )) */}
                             </SelectContent>
                           </Select>
                         )}
                       />
-                      {errors.type && (
+                      {errors.subCategoryId && (
                         <p className="text-sm text-red-500">
-                          {errors.type.message}
+                          {errors.subCategoryId.message}
                         </p>
                       )}
                     </div>
@@ -217,35 +220,36 @@ export default function ProductForm({ productId }: ProductFormProps) {
                       </CardHeader>
                       <CardContent className="space-y-4">
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+
                           {/* Size */}
                           <div className="space-y-2">
                             <Label>
                               Size <span className="text-red-500">*</span>
                             </Label>
                             <Controller
-                              name={`variants.${index}.size`}
+                              name={`variants.${index}.sizeId`}
                               control={control}
                               rules={{ required: "Size is required" }}
                               render={({ field }) => (
                                 <Select
                                   onValueChange={field.onChange}
-                                  defaultValue={field.value}
+                                  defaultValue={field.value ? String(field.value) : undefined}
                                 >
                                   <SelectTrigger>
                                     <SelectValue placeholder="Size" />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    <SelectItem value="XS">XS</SelectItem>
-                                    <SelectItem value="S">S</SelectItem>
-                                    <SelectItem value="M">M</SelectItem>
-                                    <SelectItem value="L">L</SelectItem>
-                                    <SelectItem value="XL">XL</SelectItem>
-                                    <SelectItem value="XXL">XXL</SelectItem>
+                                    {/* TODO: Map sizes fetched from backend */}
+                                    {/* Example: */}
+                                    {/* sizes.map((size) => (
+                                      <SelectItem key={size.id} value={String(size.id)}>{size.name}</SelectItem>
+                                    )) */}
                                   </SelectContent>
                                 </Select>
                               )}
                             />
                           </div>
+
 
                           {/* Color */}
                           <div className="space-y-2">
@@ -253,22 +257,26 @@ export default function ProductForm({ productId }: ProductFormProps) {
                               Color <span className="text-red-500">*</span>
                             </Label>
                             <Controller
-                              name={`variants.${index}.color`}
+                              name={`variants.${index}.colorId`}
                               control={control}
                               rules={{ required: "Color is required" }}
                               render={({ field }) => (
                                 <Select
                                   onValueChange={field.onChange}
-                                  defaultValue={field.value}
+                                  defaultValue={field.value ? String(field.value) : undefined}
                                 >
                                   <SelectTrigger>
                                     <SelectValue placeholder="Color" />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    <SelectItem value="BLACK">Black</SelectItem>
-                                    <SelectItem value="WHITE">White</SelectItem>
-                                    <SelectItem value="RED">Red</SelectItem>
-                                    <SelectItem value="BLUE">Blue</SelectItem>
+                                    {/* TODO: Map colors fetched from backend */}
+                                    {/* Example: */}
+                                    {/* colors.map((color) => (
+                                      <SelectItem key={color.id} value={String(color.id)}>
+                                        <span style={{ background: color.hexCode, display: 'inline-block', width: 16, height: 16, borderRadius: '50%', marginRight: 8 }} />
+                                        {color.name}
+                                      </SelectItem>
+                                    )) */}
                                   </SelectContent>
                                 </Select>
                               )}
@@ -414,8 +422,8 @@ export default function ProductForm({ productId }: ProductFormProps) {
                     onClick={() =>
                       append({
                         id: 0,
-                        size: "",
-                        color: "",
+                        sizeId: 0,
+                        colorId: 0,
                         price: 0,
                         images: [],
                       })
@@ -457,12 +465,12 @@ export default function ProductForm({ productId }: ProductFormProps) {
               <ul className="text-sm text-yellow-700 list-disc list-inside space-y-1">
                 {!formValues.title && <li>Add product title</li>}
                 {!formValues.description && <li>Add product description</li>}
-                {!formValues.type && <li>Select product type</li>}
+                {!formValues.subCategoryId && <li>Select subcategory</li>}
                 {!formValues.gender && <li>Select gender</li>}
-                {formValues.variants?.some((v) => !v.size) && (
+                {formValues.variants?.some((v) => !v.sizeId) && (
                   <li>Select size for all variants</li>
                 )}
-                {formValues.variants?.some((v) => !v.color) && (
+                {formValues.variants?.some((v) => !v.colorId) && (
                   <li>Select color for all variants</li>
                 )}
                 {formValues.variants?.some((v) => !v.price || v.price <= 0) && (

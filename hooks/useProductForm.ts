@@ -25,7 +25,7 @@ export function useProductForm(productId?: number) {
     formState: { errors, isSubmitting },
   } = useForm<ProductFormData>({
     defaultValues: {
-      variants: [{ id: 0, size: "", color: "", price: 0, images: [] }],
+      variants: [{ id: 0, sizeId: 0, colorId: 0, price: 0, images: [] }],
     },
   });
 
@@ -43,13 +43,13 @@ export function useProductForm(productId?: number) {
       reset({
         title: product.title,
         description: product.description,
-        type: product.type,
+        subCategoryId: product.subCategoryId,
         gender: product.gender,
         brand: product.brand,
         variants: product.variants.map((v: any) => ({
           id: v.id,
-          size: v.size,
-          color: v.color,
+          sizeId: v.sizeId,
+          colorId: v.colorId,
           price: v.price,
           images: v.images.map((img: any) => img.url),
         })),
@@ -64,11 +64,11 @@ export function useProductForm(productId?: number) {
   const isFormValid =
     formValues.title &&
     formValues.description &&
-    formValues.type &&
+    formValues.subCategoryId &&
     formValues.gender &&
     formValues.variants?.length > 0 &&
     formValues.variants.every(
-      (v) => v.size && v.color && v.price > 0 && v.images?.length > 0,
+      (v) => v.sizeId && v.colorId && v.price > 0 && v.images?.length > 0,
     );
 
   const onSubmit = async (data: ProductFormData) => {
@@ -77,15 +77,15 @@ export function useProductForm(productId?: number) {
         await updateProduct(productId!, {
           title: data.title,
           description: data.description,
-          type: data.type,
+          subCategoryId: data.subCategoryId,
           gender: data.gender,
           brand: data.brand,
           variants: data.variants.map((v) => ({
             id: v.id,
-            size: v.size,
-            color: v.color,
+            sizeId: v.sizeId,
+            colorId: v.colorId,
             price: v.price,
-            sku: `SKU-${v.size}-${v.color}`,
+            sku: `SKU-${v.sizeId}-${v.colorId}`,
           })),
         });
 
@@ -101,7 +101,7 @@ export function useProductForm(productId?: number) {
         const product = await createProduct({
           title: data.title,
           description: data.description,
-          type: data.type,
+          subCategoryId: data.subCategoryId,
           gender: data.gender,
           brand: data.brand,
         });
@@ -109,8 +109,8 @@ export function useProductForm(productId?: number) {
         for (const variant of data.variants) {
           const createdVariant = await createVariant({
             productId: product.id,
-            size: variant.size,
-            color: variant.color,
+            sizeId: variant.sizeId,
+            colorId: variant.colorId,
             price: variant.price,
           });
 
