@@ -22,6 +22,8 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Pencil, Trash2, Eye } from "lucide-react";
 import Image from "next/image";
+import { Skeleton } from "@/components/ui/skeleton";
+import { toast } from "sonner";
 
 type Product = {
   id: number;
@@ -85,26 +87,54 @@ export default function Products() {
   };
 
   if (loading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">Products</h1>
+          <Button onClick={() => router.push('/products/new')}>Add Product</Button>
+        </div>
+        <div className="space-y-2">
+          {[...Array(5)].map((_, i) => (
+            <Skeleton key={i} className="h-10 w-full" />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (products.length === 0) {
+    return (
+      <div className="p-6">
+        <div className="flex justify-between items-center mb-6">
+          <h1 className="text-2xl font-bold">Products</h1>
+          <Button onClick={() => router.push('/products/new')}>Add Product</Button>
+        </div>
+        <div className="p-8 text-center text-gray-500">No products found.</div>
+      </div>
+    );
   }
 
   return (
-    <div className="space-y-4">
+    <div className="p-6">
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">Products</h1>
+        <Button onClick={() => router.push('/products/new')}>Add Product</Button>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Product</TableHead>
-            <TableHead>Type</TableHead>
-            <TableHead>Gender</TableHead>
-            <TableHead>Price</TableHead>
-            <TableHead>Variants</TableHead>
-            <TableHead className="text-right">Actions</TableHead>
+            <TableHead className="py-2 px-3 text-left">Product</TableHead>
+            <TableHead className="py-2 px-3 text-left">Type</TableHead>
+            <TableHead className="py-2 px-3 text-left">Gender</TableHead>
+            <TableHead className="py-2 px-3 text-left">Price</TableHead>
+            <TableHead className="py-2 px-3 text-left">Variants</TableHead>
+            <TableHead className="py-2 px-3 text-left">Actions</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {products.map((product) => (
             <TableRow key={product.id}>
-              <TableCell>
+              <TableCell className="py-2 px-3">
                 <div className="flex items-center gap-3">
                   <Image
                     src={getPrimaryImage(product.variants)}
@@ -123,30 +153,24 @@ export default function Products() {
                   </div>
                 </div>
               </TableCell>
-              <TableCell>
+              <TableCell className="py-2 px-3">
                 <Badge variant="outline">{product.type}</Badge>
               </TableCell>
-              <TableCell>{product.gender}</TableCell>
-              <TableCell>{getPriceRange(product.variants)}</TableCell>
-              <TableCell>
+              <TableCell className="py-2 px-3">{product.gender}</TableCell>
+              <TableCell className="py-2 px-3">{getPriceRange(product.variants)}</TableCell>
+              <TableCell className="py-2 px-3">
                 <Badge>{product.variants.length} variants</Badge>
               </TableCell>
-              <TableCell className="text-right">
-                <div className="flex justify-end gap-2">
-                  <Button
-                    size="sm"
-                    variant="ghost"
-                    onClick={() => openModal(product)}
-                  >
-                    <Eye className="w-4 h-4" />
-                  </Button>
-                  <Button size="sm" variant="ghost" onClick={() => handleEdit(product.id)}>
-                    <Pencil className="w-4 h-4" />
-                  </Button>
-                  <Button size="sm" variant="ghost">
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
+              <TableCell className="py-2 px-3 flex gap-2">
+                <Button size="sm" variant="outline" onClick={() => openModal(product)}>
+                  View
+                </Button>
+                <Button size="sm" variant="outline" onClick={() => handleEdit(product.id)}>
+                  Edit
+                </Button>
+                <Button size="sm" variant="destructive">
+                  Delete
+                </Button>
               </TableCell>
             </TableRow>
           ))}
