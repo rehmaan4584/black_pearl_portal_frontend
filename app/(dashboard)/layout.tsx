@@ -14,7 +14,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
   const router = useRouter();
 
   const getAddButton = (): AddButton | null => {
-    if (pathname.startsWith("/products")) {
+    if (pathname?.startsWith("/products")) {
       return { route: "/products/new", label: "Add Product" };
     }
     return null;

@@ -41,7 +41,13 @@ export function AppSidebar() {
                 <Link href="/products">Products</Link>
               </SidebarMenuButton>
             </SidebarMenuItem>
+            <SidebarMenuItem>
+              <SidebarMenuButton asChild>
+                <Link href="/categories">Categories</Link>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
           </SidebarMenu>
+          
         </SidebarGroup>
 
         {/* for another same values of group */}

@@ -2,7 +2,7 @@
 
 export async function apiRequest(
   path: string,
-  method: "GET" | "POST" | "PUT" | "DELETE" = "GET",
+  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
   body?: any,
 ) {
   // Get token from localStorage
