@@ -19,3 +19,11 @@ export async function updateProduct(productId: number, data: any) {
 export async function createVariant(data: any) {
   return apiRequest("product-variant/create", "POST", data);
 }
+
+// Cascade delete endpoint: product + variants + images
+export async function deleteProduct(productId: number) {
+  return apiRequest(
+    `products/delete-with-variants/${productId}`,
+    "DELETE"
+  );
+}

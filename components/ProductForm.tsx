@@ -41,8 +41,11 @@ export default function ProductForm({ productId }: ProductFormProps) {
     onSubmit,
     isSubmitting,
     isFormValid,
-    isEditMode, 
+    isEditMode,
     formValues,
+    subCategories,
+    sizes,
+    colors,
   } = useProductForm(productId);
   return (
     <div className="h-full overflow-y-auto">
@@ -122,17 +125,20 @@ export default function ProductForm({ productId }: ProductFormProps) {
                         render={({ field }) => (
                           <Select
                             onValueChange={field.onChange}
-                            defaultValue={field.value ? String(field.value) : undefined}
+                            defaultValue={field.value}
                           >
                             <SelectTrigger>
                               <SelectValue placeholder="Select subcategory" />
                             </SelectTrigger>
                             <SelectContent>
-                              {/* TODO: Map subcategories fetched from backend */}
-                              {/* Example: */}
-                              {/* subCategories.map((sub) => (
-                                <SelectItem key={sub.id} value={String(sub.id)}>{sub.name}</SelectItem>
-                              )) */}
+                              {subCategories.map((sub) => (
+                                <SelectItem
+                                  key={sub.id}
+                                  value={String(sub.id)}
+                                >
+                                  {sub.name}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                         )}
@@ -233,17 +239,20 @@ export default function ProductForm({ productId }: ProductFormProps) {
                               render={({ field }) => (
                                 <Select
                                   onValueChange={field.onChange}
-                                  defaultValue={field.value ? String(field.value) : undefined}
+                                  defaultValue={field.value}
                                 >
                                   <SelectTrigger>
                                     <SelectValue placeholder="Size" />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    {/* TODO: Map sizes fetched from backend */}
-                                    {/* Example: */}
-                                    {/* sizes.map((size) => (
-                                      <SelectItem key={size.id} value={String(size.id)}>{size.name}</SelectItem>
-                                    )) */}
+                                    {sizes.map((size) => (
+                                      <SelectItem
+                                        key={size.id}
+                                        value={String(size.id)}
+                                      >
+                                        {size.name}
+                                      </SelectItem>
+                                    ))}
                                   </SelectContent>
                                 </Select>
                               )}
@@ -263,20 +272,30 @@ export default function ProductForm({ productId }: ProductFormProps) {
                               render={({ field }) => (
                                 <Select
                                   onValueChange={field.onChange}
-                                  defaultValue={field.value ? String(field.value) : undefined}
+                                  defaultValue={field.value}
                                 >
                                   <SelectTrigger>
                                     <SelectValue placeholder="Color" />
                                   </SelectTrigger>
                                   <SelectContent>
-                                    {/* TODO: Map colors fetched from backend */}
-                                    {/* Example: */}
-                                    {/* colors.map((color) => (
-                                      <SelectItem key={color.id} value={String(color.id)}>
-                                        <span style={{ background: color.hexCode, display: 'inline-block', width: 16, height: 16, borderRadius: '50%', marginRight: 8 }} />
+                                    {colors.map((color) => (
+                                      <SelectItem
+                                        key={color.id}
+                                        value={String(color.id)}
+                                      >
+                                        <span
+                                          style={{
+                                            backgroundColor: color.hexCode,
+                                            display: "inline-block",
+                                            width: 16,
+                                            height: 16,
+                                            borderRadius: "9999px",
+                                            marginRight: 8,
+                                          }}
+                                        />
                                         {color.name}
                                       </SelectItem>
-                                    )) */}
+                                    ))}
                                   </SelectContent>
                                 </Select>
                               )}

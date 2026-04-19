@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import { ProductFormData } from "@/types/product.types";
@@ -11,10 +11,20 @@ import {
   createVariant,
 } from "@/services/product.service";
 import { uploadVariantImages } from "@/lib/uploadVariantImages";
+import { fetchSubCategories } from "@/services/sub-category.service";
+import { fetchSizes } from "@/services/size.service";
+import { fetchColors } from "@/services/color.service";
+import type { SubCategory } from "@/types/sub-category.types";
+import type { Size } from "@/types/size.types";
+import type { Color } from "@/types/color.types";
 
 export function useProductForm(productId?: number) {
   const router = useRouter();
   const isEditMode = !!productId;
+
+  const [subCategories, setSubCategories] = useState<SubCategory[]>([]);
+  const [sizes, setSizes] = useState<Size[]>([]);
+  const [colors, setColors] = useState<Color[]>([]);
 
   const {
     register,
@@ -25,7 +35,12 @@ export function useProductForm(productId?: number) {
     formState: { errors, isSubmitting },
   } = useForm<ProductFormData>({
     defaultValues: {
-      variants: [{ id: 0, sizeId: 0, colorId: 0, price: 0, images: [] }],
+      title: "",
+      description: "",
+      subCategoryId: "",
+      gender: "",
+      brand: "",
+      variants: [{ id: 0, sizeId: "", colorId: "", price: 0, images: [] }],
     },
   });
 
@@ -33,6 +48,26 @@ export function useProductForm(productId?: number) {
     control,
     name: "variants",
   });
+
+  useEffect(() => {
+    async function loadMeta() {
+      try {
+        const [subCats, sizesData, colorsData] = await Promise.all([
+          // TODO: replace 1 with selected categoryId when category selection is added
+          fetchSubCategories(1),
+          fetchSizes(),
+          fetchColors(),
+        ]);
+        setSubCategories(subCats);
+        setSizes(sizesData);
+        setColors(colorsData);
+      } catch (error) {
+        console.error("Failed to load product metadata", error);
+      }
+    }
+
+    loadMeta();
+  }, []);
 
   useEffect(() => {
     if (!isEditMode) return;
@@ -43,13 +78,13 @@ export function useProductForm(productId?: number) {
       reset({
         title: product.title,
         description: product.description,
-        subCategoryId: product.subCategoryId,
+        subCategoryId: String(product.subCategoryId),
         gender: product.gender,
         brand: product.brand,
         variants: product.variants.map((v: any) => ({
           id: v.id,
-          sizeId: v.sizeId,
-          colorId: v.colorId,
+          sizeId: String(v.sizeId),
+          colorId: String(v.colorId),
           price: v.price,
           images: v.images.map((img: any) => img.url),
         })),
@@ -57,7 +92,7 @@ export function useProductForm(productId?: number) {
     }
 
     fetchData();
-  }, [productId]);
+  }, [isEditMode, productId, reset]);
 
   const formValues = watch();
 
@@ -77,13 +112,13 @@ export function useProductForm(productId?: number) {
         await updateProduct(productId!, {
           title: data.title,
           description: data.description,
-          subCategoryId: data.subCategoryId,
+          subCategoryId: Number(data.subCategoryId),
           gender: data.gender,
           brand: data.brand,
           variants: data.variants.map((v) => ({
             id: v.id,
-            sizeId: v.sizeId,
-            colorId: v.colorId,
+            sizeId: Number(v.sizeId),
+            colorId: Number(v.colorId),
             price: v.price,
             sku: `SKU-${v.sizeId}-${v.colorId}`,
           })),
@@ -101,7 +136,7 @@ export function useProductForm(productId?: number) {
         const product = await createProduct({
           title: data.title,
           description: data.description,
-          subCategoryId: data.subCategoryId,
+          subCategoryId: Number(data.subCategoryId),
           gender: data.gender,
           brand: data.brand,
         });
@@ -109,8 +144,8 @@ export function useProductForm(productId?: number) {
         for (const variant of data.variants) {
           const createdVariant = await createVariant({
             productId: product.id,
-            sizeId: variant.sizeId,
-            colorId: variant.colorId,
+            sizeId: Number(variant.sizeId),
+            colorId: Number(variant.colorId),
             price: variant.price,
           });
 
@@ -135,7 +170,10 @@ export function useProductForm(productId?: number) {
     onSubmit,
     isSubmitting,
     isFormValid,
-    isEditMode, 
+    isEditMode,
     formValues,
+    subCategories,
+    sizes,
+    colors,
   };
 }

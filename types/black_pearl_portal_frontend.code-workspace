@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "../../black_pearl_backend"
+		},
+		{
+			"path": "../../black_pearl_store_frontend"
+		}
+	],
+	"settings": {}
+}

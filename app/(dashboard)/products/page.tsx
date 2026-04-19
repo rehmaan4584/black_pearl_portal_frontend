@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 import { apiRequest } from "@/lib/api";
 import {
   Table,
@@ -24,6 +24,9 @@ import { Pencil, Trash2, Eye } from "lucide-react";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
+import type { Size } from "@/types/size.types";
+import type { Color } from "@/types/color.types";
+import { deleteProduct } from "@/services/product.service";
 
 type Product = {
   id: number;
@@ -33,8 +36,8 @@ type Product = {
   brand?: string;
   variants: {
     id: number;
-    size: string;
-    color: string;
+    size: Size;
+    color: Color;
     price: number;
     images: { url: string; isPrimary: boolean }[];
   }[];
@@ -46,6 +49,9 @@ export default function Products() {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(true);
   const [isOpen, setIsOpen] = useState(false);
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [deleteProductId, setDeleteProductId] = useState<number | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     fetchProducts();
@@ -84,6 +90,29 @@ export default function Products() {
   const openModal = (product: Product) => {
     setSelectedProduct(product);
     setIsOpen(true);
+  };
+
+  const openDeleteModal = (productId: number) => {
+    setDeleteProductId(productId);
+    setIsDeleteOpen(true);
+  };
+
+  const handleDelete = async () => {
+    if (!deleteProductId) return;
+
+    try {
+      setIsDeleting(true);
+      await deleteProduct(deleteProductId);
+      setProducts((prev) => prev.filter((p) => p.id !== deleteProductId));
+      toast.success("Product deleted successfully");
+      setIsDeleteOpen(false);
+      setDeleteProductId(null);
+    } catch (error) {
+      console.error("Failed to delete product:", error);
+      toast.error("Failed to delete product");
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   if (loading) {
@@ -168,7 +197,11 @@ export default function Products() {
                 <Button size="sm" variant="outline" onClick={() => handleEdit(product.id)}>
                   Edit
                 </Button>
-                <Button size="sm" variant="destructive">
+                <Button
+                  size="sm"
+                  variant="destructive"
+                  onClick={() => openDeleteModal(product.id)}
+                >
                   Delete
                 </Button>
               </TableCell>
@@ -200,11 +233,11 @@ export default function Products() {
                 <div className="flex gap-6 flex-wrap">
                   <div>
                     <p className="text-sm text-muted-foreground">Size</p>
-                    <p>{variant.size}</p>
+                    <p>{variant.size?.name}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Color</p>
-                    <p>{variant.color}</p>
+                    <p>{variant.color?.name}</p>
                   </div>
                   <div>
                     <p className="text-sm text-muted-foreground">Price</p>
@@ -237,6 +270,43 @@ export default function Products() {
                 <Button variant="outline">Close</Button>
               </DialogClose>
             </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Delete confirmation dialog */}
+      <Dialog
+        open={isDeleteOpen}
+        onOpenChange={(open) => {
+          setIsDeleteOpen(open);
+          if (!open) {
+            setDeleteProductId(null);
+          }
+        }}
+      >
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete product</DialogTitle>
+            <DialogDescription>
+              This will permanently delete this product and all of its variants
+              and images. This action cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <div className="mt-4 flex justify-end gap-2">
+            <Button
+              variant="outline"
+              onClick={() => setIsDeleteOpen(false)}
+              disabled={isDeleting}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={handleDelete}
+              disabled={isDeleting}
+            >
+              {isDeleting ? "Deleting..." : "Delete"}
+            </Button>
           </div>
         </DialogContent>
       </Dialog>
