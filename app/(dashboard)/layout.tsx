@@ -1,4 +1,5 @@
 "use client";
+
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { usePathname, useRouter } from "next/navigation";
@@ -9,38 +10,60 @@ interface AddButton {
   label: string;
 }
 
+function pageTitle(pathname: string | null): string {
+  if (!pathname) return "Dashboard";
+  if (pathname === "/dashboard") return "Dashboard";
+  if (pathname.startsWith("/products/new")) return "New product";
+  if (pathname.startsWith("/products/edit")) return "Edit product";
+  if (pathname.startsWith("/products")) return "Products";
+  if (pathname.includes("/categories/new")) return "New category";
+  if (pathname.includes("/categories/edit")) return "Edit category";
+  if (pathname.startsWith("/categories")) return "Categories";
+  return "Dashboard";
+}
+
 export default function Layout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
 
   const getAddButton = (): AddButton | null => {
-    if (pathname?.startsWith("/products")) {
-      return { route: "/products/new", label: "Add Product" };
+    if (pathname?.startsWith("/products") && pathname === "/products") {
+      return { route: "/products/new", label: "Add product" };
+    }
+    if (pathname?.startsWith("/categories") && pathname === "/categories") {
+      return { route: "/categories/new", label: "Add category" };
     }
     return null;
   };
 
   const addButton = getAddButton();
+  const title = pageTitle(pathname);
+
   return (
     <SidebarProvider>
       <AppSidebar />
-      <main className="w-full h-screen flex flex-col overflow-hidden">
-        <SidebarTrigger style={{ height: "40px" }} />
-        <div className="flex-1 pt-12 pb-4 px-4 overflow-y-auto">
+      <div className="flex min-h-svh w-full flex-col bg-background">
+        <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-3 border-b border-border/80 bg-background/95 px-3 backdrop-blur supports-backdrop-filter:bg-background/80 sm:px-4">
+          <SidebarTrigger className="md:ml-0" />
+          <div
+            className="hidden h-6 w-px bg-border sm:block"
+            aria-hidden
+          />
+          <h1 className="min-w-0 flex-1 truncate text-sm font-medium text-foreground sm:text-base">
+            {title}
+          </h1>
           {pathname !== "/dashboard" && addButton && (
-            <div className="flex px-2 py-2 justify-between mb-4">
-              <div>searchbox</div>
-                <Button
-                  variant="secondary"
-                  onClick={() => router.push(addButton.route)}
-                >
-                  {addButton.label}
-                </Button>
-            </div>
+            <Button
+              size="sm"
+              onClick={() => router.push(addButton.route)}
+              className="shrink-0"
+            >
+              {addButton.label}
+            </Button>
           )}
-          {children}
-        </div>
-      </main>
+        </header>
+        <main className="flex-1 overflow-y-auto p-4 sm:p-6">{children}</main>
+      </div>
     </SidebarProvider>
   );
 }

@@ -1,18 +1,30 @@
-// lib/api.ts (ya jahan bhi ye function hai)
+async function readErrorMessage(res: Response, fallback: string): Promise<string> {
+  try {
+    const errorData = await res.json();
+    if (typeof errorData?.message === "string" && errorData.message) {
+      return errorData.message;
+    }
+    if (Array.isArray(errorData?.message)) {
+      return errorData.message.join(", ");
+    }
+  } catch {
+    /* non-JSON body */
+  }
+  return fallback;
+}
 
 export async function apiRequest(
   path: string,
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
-  body?: any,
+  body?: unknown,
 ) {
-  // Get token from localStorage
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const headers: HeadersInit = {
     "Content-Type": "application/json",
   };
 
-  // Add Authorization header if token exists
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
@@ -24,41 +36,32 @@ export async function apiRequest(
   });
 
   if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.message || "API request failed");
+    const message = await readErrorMessage(res, "API request failed");
+    throw new Error(message);
   }
 
   return res.json();
 }
 
-// lib/api.ts
-
-export async function apiUpload(
-  path: string,
-  formData: FormData,
-) {
-  // Get token from localStorage
-  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+export async function apiUpload(path: string, formData: FormData) {
+  const token =
+    typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
   const headers: HeadersInit = {};
 
-  // Add Authorization header if token exists
   if (token) {
     headers["Authorization"] = `Bearer ${token}`;
   }
 
-  // IMPORTANT: Don't set Content-Type for FormData
-  // Browser automatically sets it with boundary
-
   const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}${path}`, {
-    method: 'POST',
+    method: "POST",
     headers,
     body: formData,
   });
 
   if (!res.ok) {
-    const errorData = await res.json();
-    throw new Error(errorData.message || "API request failed");
+    const message = await readErrorMessage(res, "Upload failed");
+    throw new Error(message);
   }
 
   return res.json();

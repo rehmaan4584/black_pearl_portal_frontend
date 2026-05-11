@@ -18,12 +18,12 @@ export default function EditCategoryPage() {
       setLoading(true);
       try {
         const cats = await categoryService.fetchCategories();
-        const found = cats.find((c) => c.id === id);
+        const found = cats.find((c) => String(c.id) === id);
         if (!found) throw new Error('Category not found');
         setCategory(found);
       } catch (e: any) {
         toast.error(e.message || 'Failed to load category');
-        router.push('/portal/categories');
+        router.push("/categories");
       } finally {
         setLoading(false);
       }
@@ -36,7 +36,7 @@ export default function EditCategoryPage() {
     try {
       await categoryService.updateCategory(id, values);
       toast.success('Category updated');
-      router.push('/portal/categories');
+      router.push("/categories");
     } catch (e: any) {
       toast.error(e.message || 'Failed to update category');
     } finally {

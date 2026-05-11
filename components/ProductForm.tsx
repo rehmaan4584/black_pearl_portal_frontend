@@ -27,6 +27,14 @@ interface ProductFormProps {
   productId?: number;
 }
 
+/** Narrow type for `watch("variants")` entries in validation summary */
+type WatchedVariant = {
+  sizeId?: string;
+  colorId?: string;
+  price?: number;
+  images?: string[];
+};
+
 export default function ProductForm({ productId }: ProductFormProps) {
   const router = useRouter();
 
@@ -51,9 +59,13 @@ export default function ProductForm({ productId }: ProductFormProps) {
     <div className="h-full overflow-y-auto">
       <div className="max-w-5xl mx-auto p-6 space-y-6">
         <div>
-          <h1 className="text-3xl font-bold">Add New Product</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            {isEditMode ? "Edit product" : "Add new product"}
+          </h1>
           <p className="text-muted-foreground">
-            Create a new product with variants and images
+            {isEditMode
+              ? "Update details, variants, and images for this product."
+              : "Create a new product with variants and images."}
           </p>
         </div>
 
@@ -441,8 +453,8 @@ export default function ProductForm({ productId }: ProductFormProps) {
                     onClick={() =>
                       append({
                         id: 0,
-                        sizeId: 0,
-                        colorId: 0,
+                        sizeId: "",
+                        colorId: "",
                         price: 0,
                         images: [],
                       })
@@ -486,17 +498,17 @@ export default function ProductForm({ productId }: ProductFormProps) {
                 {!formValues.description && <li>Add product description</li>}
                 {!formValues.subCategoryId && <li>Select subcategory</li>}
                 {!formValues.gender && <li>Select gender</li>}
-                {formValues.variants?.some((v) => !v.sizeId) && (
+                {formValues.variants?.some((v: WatchedVariant) => !v.sizeId) && (
                   <li>Select size for all variants</li>
                 )}
-                {formValues.variants?.some((v) => !v.colorId) && (
+                {formValues.variants?.some((v: WatchedVariant) => !v.colorId) && (
                   <li>Select color for all variants</li>
                 )}
-                {formValues.variants?.some((v) => !v.price || v.price <= 0) && (
-                  <li>Add valid price for all variants</li>
-                )}
                 {formValues.variants?.some(
-                  (v) => !v.images || v.images.length === 0,
+                  (v: WatchedVariant) => !v.price || v.price <= 0,
+                ) && <li>Add valid price for all variants</li>}
+                {formValues.variants?.some(
+                  (v: WatchedVariant) => !v.images || v.images.length === 0,
                 ) && <li>Upload at least one image for each variant</li>}
               </ul>
             </div>

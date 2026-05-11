@@ -1,8 +1,9 @@
-'use client';
+"use client";
 
 import { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { ProductFormData } from "@/types/product.types";
 import {
   getProduct,
@@ -63,6 +64,11 @@ export function useProductForm(productId?: number) {
         setColors(colorsData);
       } catch (error) {
         console.error("Failed to load product metadata", error);
+        toast.error(
+          error instanceof Error
+            ? error.message
+            : "Could not load sizes, colors, or categories",
+        );
       }
     }
 
@@ -153,9 +159,15 @@ export function useProductForm(productId?: number) {
         }
       }
 
+      toast.success(
+        isEditMode ? "Product updated successfully" : "Product created successfully",
+      );
       router.push("/products");
     } catch (error) {
       console.error(error);
+      const message =
+        error instanceof Error ? error.message : "Something went wrong";
+      toast.error(message);
     }
   };
 

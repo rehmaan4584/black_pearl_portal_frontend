@@ -14,7 +14,7 @@ export default function NewCategoryPage() {
     try {
       await categoryService.createCategory(values);
       toast.success('Category created');
-      router.push('/portal/categories');
+      router.push("/categories");
     } catch (e: any) {
       toast.error(e.message || 'Failed to create category');
     } finally {
