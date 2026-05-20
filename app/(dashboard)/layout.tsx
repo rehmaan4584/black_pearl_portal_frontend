@@ -43,20 +43,17 @@ export default function Layout({ children }: { children: React.ReactNode }) {
     <SidebarProvider>
       <AppSidebar />
       <div className="flex min-h-svh w-full flex-col bg-background">
-        <header className="sticky top-0 z-20 flex h-14 shrink-0 items-center gap-3 border-b border-border/80 bg-background/95 px-3 backdrop-blur supports-backdrop-filter:bg-background/80 sm:px-4">
-          <SidebarTrigger className="md:ml-0" />
-          <div
-            className="hidden h-6 w-px bg-border sm:block"
-            aria-hidden
-          />
-          <h1 className="min-w-0 flex-1 truncate text-sm font-medium text-foreground sm:text-base">
+        <header className="glass sticky top-0 z-30 flex h-16 shrink-0 items-center gap-4 border-b border-white/5 bg-background/60 px-6 backdrop-blur-xl">
+          <SidebarTrigger className="-ml-1 text-primary hover:bg-primary/10" />
+          <div className="h-4 w-px bg-white/10" aria-hidden />
+          <h1 className="min-w-0 flex-1 truncate text-base font-bold tracking-tight text-white">
             {title}
           </h1>
           {pathname !== "/dashboard" && addButton && (
             <Button
               size="sm"
               onClick={() => router.push(addButton.route)}
-              className="shrink-0"
+              className="shrink-0 cyan-glow"
             >
               {addButton.label}
             </Button>

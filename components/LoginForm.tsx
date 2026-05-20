@@ -17,6 +17,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { BlackPearlLogo } from "./BlackPearlLogo";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -53,25 +54,16 @@ export function LoginForm() {
   };
 
   return (
-    <Card className="border-border/80 shadow-lg">
-      <CardHeader className="space-y-4">
-        <div className="flex items-center gap-3">
-          <div className="h-10 w-10 rounded-full border border-border/70 bg-[radial-gradient(circle_at_30%_20%,rgba(234,179,8,0.22),transparent_55%),radial-gradient(circle_at_70%_80%,rgba(234,179,8,0.12),transparent_55%)]" />
-          <div className="leading-none">
-            <div className="text-sm font-semibold tracking-[0.22em] text-foreground">
-              BLACK PEARL
-            </div>
-            <div className="mt-1 text-xs text-muted-foreground">
-              merchant portal
-            </div>
-          </div>
-        </div>
-        <div>
-          <CardTitle className="text-2xl font-semibold tracking-tight">
+    <Card className="border-white/10 glass shadow-2xl overflow-hidden relative">
+      <div className="absolute -right-20 -top-20 size-64 bg-primary/10 blur-[100px] rounded-full" />
+      <CardHeader className="space-y-8 relative z-10">
+        <BlackPearlLogo size="lg" />
+        <div className="space-y-1">
+          <CardTitle className="text-3xl font-extrabold tracking-tight text-white">
             Sign in
           </CardTitle>
-          <CardDescription>
-            Use your merchant credentials to access the dashboard.
+          <CardDescription className="text-secondary/80">
+            Access your futuristic command center.
           </CardDescription>
         </div>
       </CardHeader>

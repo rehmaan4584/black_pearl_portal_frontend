@@ -5,6 +5,7 @@ import { Label } from './ui/label';
 import { Textarea } from './ui/textarea';
 import { categoryService } from '../services/category.service';
 import { CategoryFormValues } from '../types/category.types';
+import { cn } from "@/lib/utils";
 
 interface CategoryFormProps {
   initialValues?: CategoryFormValues;
@@ -61,45 +62,51 @@ export function CategoryForm({ initialValues, onSubmit, loading, submitLabel = '
   }
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div>
-        <Label htmlFor="name">Name</Label>
+    <form onSubmit={handleSubmit} className="space-y-6">
+      <div className="space-y-2">
+        <Label htmlFor="name" className="text-secondary font-semibold ml-1">Name</Label>
         <Input
           id="name"
+          className="glass-darker border-white/5 focus-visible:ring-primary/40 focus-visible:border-primary/40 h-12"
+          placeholder="e.g. Mens Shoes"
           value={values.name}
           onChange={(e) => setValues((v) => ({ ...v, name: e.target.value }))}
           maxLength={100}
           required
         />
-        {errors.name && <div className="text-red-500 text-xs mt-1">{errors.name}</div>}
+        {errors.name && <div className="text-destructive text-xs mt-1 font-medium">{errors.name}</div>}
       </div>
-      <div>
-        <Label htmlFor="slug">Slug</Label>
+      <div className="space-y-2">
+        <Label htmlFor="slug" className="text-secondary font-semibold ml-1">Slug</Label>
         <Input
           id="slug"
+          className="glass-darker border-white/5 focus-visible:ring-primary/40 focus-visible:border-primary/40 h-12"
+          placeholder="mens-shoes"
           value={values.slug}
           onChange={(e) => setValues((v) => ({ ...v, slug: e.target.value }))}
           maxLength={100}
           required
         />
-        {errors.slug && <div className="text-red-500 text-xs mt-1">{errors.slug}</div>}
+        {errors.slug && <div className="text-destructive text-xs mt-1 font-medium">{errors.slug}</div>}
       </div>
-      <div>
-        <Label htmlFor="description">Description</Label>
+      <div className="space-y-2">
+        <Label htmlFor="description" className="text-secondary font-semibold ml-1">Description</Label>
         <Textarea
           id="description"
+          className="glass-darker border-white/5 focus-visible:ring-primary/40 focus-visible:border-primary/40 min-h-[120px] resize-none"
+          placeholder="Describe this category collection..."
           value={values.description}
           onChange={(e) => setValues((v) => ({ ...v, description: e.target.value }))}
           maxLength={255}
         />
       </div>
-      <div className="flex gap-2 justify-end">
+      <div className="flex gap-3 pt-4">
         {onClose && (
-          <Button type="button" variant="outline" onClick={onClose} disabled={loading}>
+          <Button type="button" variant="outline" className="flex-1 border-white/10 hover:bg-white/5" onClick={onClose} disabled={loading}>
             Cancel
           </Button>
         )}
-        <Button type="submit" disabled={loading}>
+        <Button type="submit" className={cn("flex-1 cyan-glow font-bold", !onClose && "w-full")} disabled={loading}>
           {loading ? 'Saving...' : submitLabel}
         </Button>
       </div>

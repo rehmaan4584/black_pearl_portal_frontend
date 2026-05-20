@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from 'react';
+import { FolderTree } from "lucide-react";
 import { categoryService } from '../../../services/category.service';
 import { Category } from '../../../types/category.types';
 import { Button } from '../../../components/ui/button';
@@ -83,10 +84,7 @@ export default function CategoriesPage() {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Categories</h1>
-        <Button onClick={handleAdd}>Add Category</Button>
-      </div>
+      <h1 className="text-3xl font-extrabold tracking-tight text-white mb-6">Categories</h1>
       <Card>
         {loading ? (
           <div className="space-y-2">
@@ -95,7 +93,10 @@ export default function CategoriesPage() {
             ))}
           </div>
         ) : categories.length === 0 ? (
-          <div className="p-8 text-center text-gray-500">No categories found.</div>
+          <div className="p-16 text-center glass rounded-2xl border border-white/5">
+                <FolderTree className="size-16 text-teal-100/10 mx-auto mb-6" />
+                <p className="text-teal-100/60 italic text-lg font-medium tracking-wide">No categories found.</p>
+          </div>
         ) : (
           <table className="w-full text-sm">
             <thead>

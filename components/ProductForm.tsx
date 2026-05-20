@@ -56,18 +56,17 @@ export default function ProductForm({ productId }: ProductFormProps) {
     colors,
   } = useProductForm(productId);
   return (
-    <div className="h-full overflow-y-auto">
-      <div className="max-w-5xl mx-auto p-6 space-y-6">
-        <div>
-          <h1 className="text-3xl font-bold tracking-tight">
+      <div className="space-y-6">
+        <header className="space-y-2">
+          <h1 className="text-4xl font-extrabold tracking-tight text-white">
             {isEditMode ? "Edit product" : "Add new product"}
           </h1>
-          <p className="text-muted-foreground">
+          <p className="text-teal-100/60 text-lg font-medium">
             {isEditMode
               ? "Update details, variants, and images for this product."
               : "Create a new product with variants and images."}
           </p>
-        </div>
+        </header>
 
         <form onSubmit={handleSubmit(onSubmit)}>
           <Tabs defaultValue="basic" className="w-full">
@@ -77,11 +76,11 @@ export default function ProductForm({ productId }: ProductFormProps) {
             </TabsList>
 
             {/* Tab 1: Basic Info */}
-            <TabsContent value="basic">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Product Information</CardTitle>
-                  <CardDescription>
+            <TabsContent value="basic" className="mt-6">
+              <Card className="glass border-white/5 overflow-hidden">
+                <CardHeader className="border-b border-white/5 bg-white/2 pb-6">
+                  <CardTitle className="text-white">Product Information</CardTitle>
+                  <CardDescription className="text-teal-100/50 font-medium">
                     Enter the basic details of your product
                   </CardDescription>
                 </CardHeader>
@@ -89,15 +88,16 @@ export default function ProductForm({ productId }: ProductFormProps) {
                   {/* Title */}
                   <div className="space-y-2">
                     <Label htmlFor="title">
-                      Title <span className="text-red-500">*</span>
+                      Title <span className="text-destructive">*</span>
                     </Label>
                     <Input
                       id="title"
+                      className="glass-darker border-white/5 focus-visible:ring-primary/40 focus-visible:border-primary/40 h-12 placeholder:text-white/30"
                       placeholder="Enter product title"
                       {...register("title", { required: "Title is required" })}
                     />
                     {errors.title && (
-                      <p className="text-sm text-red-500">
+                      <p className="text-sm text-destructive">
                         {errors.title.message}
                       </p>
                     )}
@@ -106,10 +106,11 @@ export default function ProductForm({ productId }: ProductFormProps) {
                   {/* Description */}
                   <div className="space-y-2">
                     <Label htmlFor="description">
-                      Description <span className="text-red-500">*</span>
+                      Description <span className="text-destructive">*</span>
                     </Label>
                     <Textarea
                       id="description"
+                      className="glass-darker border-white/5 focus-visible:ring-primary/40 focus-visible:border-primary/40 min-h-[120px] placeholder:text-white/30"
                       placeholder="Enter product description"
                       rows={4}
                       {...register("description", {
@@ -117,7 +118,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                       })}
                     />
                     {errors.description && (
-                      <p className="text-sm text-red-500">
+                      <p className="text-sm text-destructive">
                         {errors.description.message}
                       </p>
                     )}
@@ -128,7 +129,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div className="space-y-2">
                       <Label htmlFor="subCategoryId">
-                        Subcategory <span className="text-red-500">*</span>
+                        Subcategory <span className="text-destructive">*</span>
                       </Label>
                       <Controller
                         name="subCategoryId"
@@ -156,7 +157,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                         )}
                       />
                       {errors.subCategoryId && (
-                        <p className="text-sm text-red-500">
+                        <p className="text-sm text-destructive">
                           {errors.subCategoryId.message}
                         </p>
                       )}
@@ -164,7 +165,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
 
                     <div className="space-y-2">
                       <Label htmlFor="gender">
-                        Gender <span className="text-red-500">*</span>
+                        Gender <span className="text-destructive">*</span>
                       </Label>
                       <Controller
                         name="gender"
@@ -187,7 +188,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                         )}
                       />
                       {errors.gender && (
-                        <p className="text-sm text-red-500">
+                        <p className="text-sm text-destructive">
                           {errors.gender.message}
                         </p>
                       )}
@@ -199,6 +200,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                     <Label htmlFor="brand">Brand (Optional)</Label>
                     <Input
                       id="brand"
+                      className="glass-darker border-white/5 focus-visible:ring-primary/40 focus-visible:border-primary/40 h-12 placeholder:text-white/30"
                       placeholder="Enter brand name"
                       {...register("brand")}
                     />
@@ -208,11 +210,11 @@ export default function ProductForm({ productId }: ProductFormProps) {
             </TabsContent>
 
             {/* Tab 2: Variants */}
-            <TabsContent value="variants">
-              <Card>
-                <CardHeader>
-                  <CardTitle>Product Variants</CardTitle>
-                  <CardDescription>
+            <TabsContent value="variants" className="mt-6">
+              <Card className="glass border-white/5 overflow-hidden">
+                <CardHeader className="border-b border-white/5 bg-white/2 pb-6">
+                  <CardTitle className="text-white">Product Variants</CardTitle>
+                  <CardDescription className="text-teal-100/50 font-medium">
                     Add different sizes, colors, and prices
                   </CardDescription>
                 </CardHeader>
@@ -242,7 +244,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                           {/* Size */}
                           <div className="space-y-2">
                             <Label>
-                              Size <span className="text-red-500">*</span>
+                              Size <span className="text-destructive">*</span>
                             </Label>
                             <Controller
                               name={`variants.${index}.sizeId`}
@@ -275,7 +277,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                           {/* Color */}
                           <div className="space-y-2">
                             <Label>
-                              Color <span className="text-red-500">*</span>
+                              Color <span className="text-destructive">*</span>
                             </Label>
                             <Controller
                               name={`variants.${index}.colorId`}
@@ -317,7 +319,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                           {/* Price */}
                           <div className="space-y-2">
                             <Label>
-                              Price <span className="text-red-500">*</span>
+                              Price <span className="text-destructive">*</span>
                             </Label>
                             <Input
                               type="number"
@@ -337,7 +339,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                         {/* Image Upload with Preview */}
                         <div className="space-y-2">
                           <Label>
-                            Images <span className="text-red-500">*</span>
+                            Images <span className="text-destructive">*</span>
                           </Label>
                           <Controller
                             name={`variants.${index}.images`}
@@ -487,34 +489,34 @@ export default function ProductForm({ productId }: ProductFormProps) {
             </Button>
           </div>
 
-          {/* Validation Summary (Optional) */}
+          {/* Validation Summary */}
           {!isFormValid && (
-            <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-sm font-medium text-yellow-800 mb-2">
+            <div className="mt-8 p-6 glass-darker border border-yellow-500/20 rounded-2xl">
+              <p className="text-base font-bold text-yellow-500 mb-4 flex items-center gap-2">
+                <span className="size-2 rounded-full bg-yellow-500 animate-pulse" />
                 Please complete the following to create product:
               </p>
-              <ul className="text-sm text-yellow-700 list-disc list-inside space-y-1">
-                {!formValues.title && <li>Add product title</li>}
-                {!formValues.description && <li>Add product description</li>}
-                {!formValues.subCategoryId && <li>Select subcategory</li>}
-                {!formValues.gender && <li>Select gender</li>}
+              <ul className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-3 text-sm text-teal-100/70 list-none px-2 font-medium">
+                {!formValues.title && <li>• Add product title</li>}
+                {!formValues.description && <li>• Add product description</li>}
+                {!formValues.subCategoryId && <li>• Select subcategory</li>}
+                {!formValues.gender && <li>• Select gender</li>}
                 {formValues.variants?.some((v: WatchedVariant) => !v.sizeId) && (
-                  <li>Select size for all variants</li>
+                  <li>• Select size for all variants</li>
                 )}
                 {formValues.variants?.some((v: WatchedVariant) => !v.colorId) && (
-                  <li>Select color for all variants</li>
+                  <li>• Select color for all variants</li>
                 )}
                 {formValues.variants?.some(
                   (v: WatchedVariant) => !v.price || v.price <= 0,
-                ) && <li>Add valid price for all variants</li>}
+                ) && <li>• Add valid price for all variants</li>}
                 {formValues.variants?.some(
                   (v: WatchedVariant) => !v.images || v.images.length === 0,
-                ) && <li>Upload at least one image for each variant</li>}
+                ) && <li>• Upload at least one image for each variant</li>}
               </ul>
             </div>
           )}
         </form>
       </div>
-    </div>
   );
 }

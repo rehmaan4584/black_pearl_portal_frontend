@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Pencil, Trash2, Eye } from "lucide-react";
+import { Pencil, Trash2, Eye, Package } from "lucide-react";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
@@ -118,10 +118,7 @@ export default function Products() {
   if (loading) {
     return (
       <div className="p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Products</h1>
-          <Button onClick={() => router.push('/products/new')}>Add Product</Button>
-        </div>
+        <h1 className="text-3xl font-extrabold tracking-tight text-white mb-6">Products</h1>
         <div className="space-y-2">
           {[...Array(5)].map((_, i) => (
             <Skeleton key={i} className="h-10 w-full" />
@@ -134,20 +131,21 @@ export default function Products() {
   if (products.length === 0) {
     return (
       <div className="p-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Products</h1>
-          <Button onClick={() => router.push('/products/new')}>Add Product</Button>
+        <h1 className="text-3xl font-extrabold tracking-tight text-white mb-6">Products</h1>
+        <div className="p-16 text-center glass rounded-[2.5rem] border border-white/5 shadow-2xl">
+          <Package className="size-16 text-teal-100/10 mx-auto mb-6" />
+          <p className="text-teal-100/60 italic text-lg font-medium tracking-wide">
+            No products found. Start by adding one from the header.
+          </p>
         </div>
-        <div className="p-8 text-center text-gray-500">No products found.</div>
       </div>
     );
   }
 
   return (
-    <div className="p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">Products</h1>
-        <Button onClick={() => router.push('/products/new')}>Add Product</Button>
+    <div className="p-6 space-y-8">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-extrabold tracking-tight text-white">Products</h1>
       </div>
       <Table>
         <TableHeader>

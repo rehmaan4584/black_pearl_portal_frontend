@@ -10,15 +10,21 @@ import {
   SidebarMenu,
   SidebarMenuItem,
   SidebarMenuButton,
+  useSidebar,
 } from "@/components/ui/sidebar";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { LogOut, LayoutDashboard, Package, FolderTree } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { BlackPearlLogo } from "@/components/BlackPearlLogo";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 export function AppSidebar() {
   const router = useRouter();
+  const pathname = usePathname();
+  const { state } = useSidebar();
+  const isCollapsed = state === "collapsed";
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -27,82 +33,84 @@ export function AppSidebar() {
     router.refresh();
   };
 
+  const menuItems = [
+    { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+    { label: "Products", href: "/products", icon: Package },
+    { label: "Categories", href: "/categories", icon: FolderTree },
+  ];
+
   return (
-    <Sidebar>
-      <SidebarHeader className="border-b border-sidebar-border px-4 py-4">
-        <div className="mx-auto flex items-center gap-3">
-          <div
-            aria-hidden
-            className="flex size-10 items-center justify-center rounded-full border border-sidebar-border/80 bg-[radial-gradient(circle_at_30%_20%,rgba(234,179,8,0.22),transparent_55%),radial-gradient(circle_at_70%_80%,rgba(234,179,8,0.10),transparent_55%)]"
-          >
-            <div className="h-4 w-4 rounded-full bg-[radial-gradient(circle_at_30%_20%,rgba(255,255,255,0.35),rgba(255,255,255,0)_60%)]" />
-          </div>
-          <div className="leading-none">
-            <div className="text-[11px] font-semibold tracking-[0.24em] text-sidebar-foreground/90">
-              BLACK PEARL
-            </div>
-            <div className="mt-1 text-[10px] text-muted-foreground">
-              portal
-            </div>
-          </div>
-        </div>
+    <Sidebar collapsible="icon">
+      <SidebarHeader className="h-16 border-b border-white/5 flex items-center justify-center shrink-0">
+        <BlackPearlLogo size="md" hideText={isCollapsed} />
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Menu</SidebarGroupLabel>
+        <SidebarGroup className="group-data-[collapsible=icon]:px-0">
+          {!isCollapsed && <SidebarGroupLabel>Menu</SidebarGroupLabel>}
           <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link href="/dashboard" className="gap-2">
-                  <LayoutDashboard className="size-4 shrink-0" />
-                  <span>Dashboard</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link href="/products" className="gap-2">
-                  <Package className="size-4 shrink-0" />
-                  <span>Products</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <Link href="/categories" className="gap-2">
-                  <FolderTree className="size-4 shrink-0" />
-                  <span>Categories</span>
-                </Link>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
+            {menuItems.map((item) => {
+              const isActive = pathname === item.href;
+              return (
+                <SidebarMenuItem key={item.href} className={cn("relative flex flex-col px-0", isCollapsed ? "items-center" : "items-stretch")}>
+                  {/* Active Indicator Pipe - Glued to the absolute left edge */}
+                  {isActive && (
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[3px] rounded-r-full bg-primary cyan-glow z-30" />
+                  )}
+                  <SidebarMenuButton 
+                    asChild 
+                    isActive={isActive} 
+                    tooltip={item.label}
+                    className={cn(
+                      "transition-all duration-200",
+                      isCollapsed ? "mx-auto" : "ml-2 mr-2"
+                    )}
+                  >
+                    <Link href={item.href} className="flex items-center gap-3">
+                      <item.icon className={cn("shrink-0", isCollapsed ? "size-5" : "size-4")} />
+                      {!isCollapsed && <span className="font-medium">{item.label}</span>}
+                    </Link>
+                  </SidebarMenuButton>
+                </SidebarMenuItem>
+              );
+            })}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-sidebar-border p-4">
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center gap-3 rounded-lg bg-sidebar-accent/50 px-2 py-2">
-            <div className="flex size-9 shrink-0 items-center justify-center rounded-full bg-sidebar-primary/15 text-xs font-semibold text-sidebar-primary">
-              BP
+      <SidebarFooter className="border-t border-white/5 p-2 bg-white/2 group-data-[collapsible=icon]:px-0">
+        <div className="flex flex-col gap-2">
+          {!isCollapsed ? (
+            <div className="flex items-center gap-3 rounded-xl glass-darker px-3 py-3 border-white/5 shadow-inner">
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/20 text-xs font-bold text-primary cyan-glow">
+                BP
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-semibold text-white">Merchant</p>
+                <p className="truncate text-[10px] uppercase tracking-tighter text-primary/60 font-medium">
+                  Premium Account
+                </p>
+              </div>
             </div>
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-medium">Merchant</p>
-              <p className="truncate text-xs text-muted-foreground">
-                Seller account
-              </p>
+          ) : (
+            <div className="flex items-center justify-center group-data-[collapsible=icon]:px-1">
+              <div className="flex size-9 shrink-0 items-center justify-center rounded-lg bg-primary/20 text-xs font-bold text-primary cyan-glow">
+                BP
+              </div>
             </div>
-          </div>
+          )}
           <Button
-            variant="outline"
-            size="sm"
-            className="w-full justify-start gap-2"
+            variant="ghost"
+            size={isCollapsed ? "icon" : "sm"}
+            className={cn(
+              "w-full justify-start gap-2 text-muted-foreground hover:text-destructive", 
+              isCollapsed && "mx-auto justify-center"
+            )}
             type="button"
             onClick={handleLogout}
           >
             <LogOut className="size-4" />
-            Sign out
+            {!isCollapsed && <span>Sign out</span>}
           </Button>
         </div>
       </SidebarFooter>
