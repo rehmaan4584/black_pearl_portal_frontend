@@ -19,6 +19,21 @@ import type { SubCategory } from "@/types/sub-category.types";
 import type { Size } from "@/types/size.types";
 import type { Color } from "@/types/color.types";
 
+type ProductDetailResponse = {
+  title: string;
+  description: string;
+  subCategoryId: number;
+  gender: string;
+  brand: string;
+  variants: {
+    id: number;
+    sizeId: number;
+    colorId: number;
+    price: number;
+    images: { url: string }[];
+  }[];
+};
+
 export function useProductForm(productId?: number) {
   const router = useRouter();
   const isEditMode = !!productId;
@@ -54,8 +69,7 @@ export function useProductForm(productId?: number) {
     async function loadMeta() {
       try {
         const [subCats, sizesData, colorsData] = await Promise.all([
-          // TODO: replace 1 with selected categoryId when category selection is added
-          fetchSubCategories(1),
+          fetchSubCategories(),
           fetchSizes(),
           fetchColors(),
         ]);
@@ -79,7 +93,7 @@ export function useProductForm(productId?: number) {
     if (!isEditMode) return;
 
     async function fetchData() {
-      const product = await getProduct(productId!);
+      const product = (await getProduct(productId!)) as ProductDetailResponse;
 
       reset({
         title: product.title,
@@ -87,12 +101,12 @@ export function useProductForm(productId?: number) {
         subCategoryId: String(product.subCategoryId),
         gender: product.gender,
         brand: product.brand,
-        variants: product.variants.map((v: any) => ({
+        variants: product.variants.map((v) => ({
           id: v.id,
           sizeId: String(v.sizeId),
           colorId: String(v.colorId),
           price: v.price,
-          images: v.images.map((img: any) => img.url),
+          images: v.images.map((img) => img.url),
         })),
       });
     }

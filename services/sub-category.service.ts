@@ -1,12 +1,27 @@
 import { apiRequest } from "@/lib/api";
-import { SubCategory } from "@/types/sub-category.types";
+import { SubCategory, SubCategoryFormValues } from "@/types/sub-category.types";
 
-// Backend now requires a numeric categoryId query param and
-// validates it as a numeric string.
 export async function fetchSubCategories(
-  categoryId: number,
+  categoryId?: number,
 ): Promise<SubCategory[]> {
-  const query = `?categoryId=${categoryId}`;
+  const query = categoryId ? `?categoryId=${categoryId}` : "";
   return apiRequest(`sub-categories${query}`, "GET");
+}
+
+export async function createSubCategory(
+  data: SubCategoryFormValues,
+): Promise<SubCategory> {
+  return apiRequest("sub-categories", "POST", data);
+}
+
+export async function updateSubCategory(
+  id: number,
+  data: SubCategoryFormValues,
+): Promise<SubCategory> {
+  return apiRequest(`sub-categories/${id}`, "PATCH", data);
+}
+
+export async function deleteSubCategory(id: number): Promise<void> {
+  return apiRequest(`sub-categories/${id}`, "DELETE");
 }
 

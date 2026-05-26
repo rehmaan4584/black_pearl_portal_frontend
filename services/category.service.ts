@@ -9,11 +9,11 @@ export async function createCategory(data: CategoryFormValues): Promise<Category
   return apiRequest("categories", "POST", data);
 }
 
-export async function updateCategory(id: string, data: CategoryFormValues): Promise<Category> {
+export async function updateCategory(id: number | string, data: CategoryFormValues): Promise<Category> {
   return apiRequest(`categories/${id}`, "PATCH", data);
 }
 
-export async function deleteCategory(id: string): Promise<void> {
+export async function deleteCategory(id: number | string): Promise<void> {
   return apiRequest(`categories/${id}`, "DELETE");
 }
 

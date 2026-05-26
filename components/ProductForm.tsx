@@ -138,7 +138,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                         render={({ field }) => (
                           <Select
                             onValueChange={field.onChange}
-                            defaultValue={field.value}
+                            value={field.value}
                           >
                             <SelectTrigger>
                               <SelectValue placeholder="Select subcategory" />
@@ -149,7 +149,9 @@ export default function ProductForm({ productId }: ProductFormProps) {
                                   key={sub.id}
                                   value={String(sub.id)}
                                 >
-                                  {sub.name}
+                                  {sub.category?.name
+                                    ? `${sub.category.name} / ${sub.name}`
+                                    : sub.name}
                                 </SelectItem>
                               ))}
                             </SelectContent>
@@ -159,6 +161,11 @@ export default function ProductForm({ productId }: ProductFormProps) {
                       {errors.subCategoryId && (
                         <p className="text-sm text-destructive">
                           {errors.subCategoryId.message}
+                        </p>
+                      )}
+                      {subCategories.length === 0 && (
+                        <p className="text-sm text-teal-100/50">
+                          Create a subcategory from Categories before adding a product.
                         </p>
                       )}
                     </div>
@@ -174,7 +181,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                         render={({ field }) => (
                           <Select
                             onValueChange={field.onChange}
-                            defaultValue={field.value}
+                            value={field.value}
                           >
                             <SelectTrigger>
                               <SelectValue placeholder="Select gender" />
@@ -253,7 +260,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                               render={({ field }) => (
                                 <Select
                                   onValueChange={field.onChange}
-                                  defaultValue={field.value}
+                                  value={field.value}
                                 >
                                   <SelectTrigger>
                                     <SelectValue placeholder="Size" />
@@ -286,7 +293,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                               render={({ field }) => (
                                 <Select
                                   onValueChange={field.onChange}
-                                  defaultValue={field.value}
+                                  value={field.value}
                                 >
                                   <SelectTrigger>
                                     <SelectValue placeholder="Color" />

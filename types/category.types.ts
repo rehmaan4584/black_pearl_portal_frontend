@@ -1,9 +1,12 @@
+import type { SubCategory } from "./sub-category.types";
+
 export interface Category {
-  id: string;
+  id: number;
   name: string;
   slug: string;
   description?: string;
   createdAt: string;
+  subCategories?: SubCategory[];
 }
 
 export interface CategoryFormValues {
