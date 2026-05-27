@@ -18,6 +18,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
 import { BlackPearlLogo } from "./BlackPearlLogo";
+import { persistToken } from "@/lib/auth-token";
 
 const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -39,7 +40,7 @@ export function LoginForm() {
       const res = await apiRequest("auth/login", "POST", data);
       const token = res?.token;
       if (token) {
-        localStorage.setItem("token", token);
+        persistToken(token);
         toast.success("Signed in successfully");
         router.push("/dashboard");
         router.refresh();

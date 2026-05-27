@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { BlackPearlLogo } from "@/components/BlackPearlLogo";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { clearStoredToken } from "@/lib/auth-token";
 
 export function AppSidebar() {
   const router = useRouter();
@@ -27,7 +28,7 @@ export function AppSidebar() {
   const isCollapsed = state === "collapsed";
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    clearStoredToken();
     toast.success("Signed out");
     router.push("/login");
     router.refresh();

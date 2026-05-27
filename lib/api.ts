@@ -1,3 +1,5 @@
+import { clearStoredToken, getStoredToken } from "@/lib/auth-token";
+
 async function readErrorMessage(res: Response, fallback: string): Promise<string> {
   try {
     const errorData = await res.json();
@@ -18,8 +20,7 @@ export async function apiRequest(
   method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH" = "GET",
   body?: unknown,
 ) {
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const token = getStoredToken();
 
   const headers: HeadersInit = {
     "Content-Type": "application/json",
@@ -36,6 +37,10 @@ export async function apiRequest(
   });
 
   if (!res.ok) {
+    if (res.status === 401 && typeof window !== "undefined") {
+      clearStoredToken();
+      window.location.href = "/login";
+    }
     const message = await readErrorMessage(res, "API request failed");
     throw new Error(message);
   }
@@ -44,8 +49,7 @@ export async function apiRequest(
 }
 
 export async function apiUpload(path: string, formData: FormData) {
-  const token =
-    typeof window !== "undefined" ? localStorage.getItem("token") : null;
+  const token = getStoredToken();
 
   const headers: HeadersInit = {};
 
@@ -60,6 +64,10 @@ export async function apiUpload(path: string, formData: FormData) {
   });
 
   if (!res.ok) {
+    if (res.status === 401 && typeof window !== "undefined") {
+      clearStoredToken();
+      window.location.href = "/login";
+    }
     const message = await readErrorMessage(res, "Upload failed");
     throw new Error(message);
   }
