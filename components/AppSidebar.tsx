@@ -14,7 +14,7 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
-import { LogOut, LayoutDashboard, Package, FolderTree } from "lucide-react";
+import { LogOut, LayoutDashboard, Package, FolderTree, ClipboardList } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { BlackPearlLogo } from "@/components/BlackPearlLogo";
 import { toast } from "sonner";
@@ -38,6 +38,7 @@ export function AppSidebar() {
     { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
     { label: "Products", href: "/products", icon: Package },
     { label: "Categories", href: "/categories", icon: FolderTree },
+    { label: "Orders", href: "/orders", icon: ClipboardList },
   ];
 
   return (

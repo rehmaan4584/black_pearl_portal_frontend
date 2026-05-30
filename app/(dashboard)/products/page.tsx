@@ -118,7 +118,7 @@ export default function Products() {
   if (loading) {
     return (
       <div className="p-6">
-        <h1 className="text-3xl font-extrabold tracking-tight text-white mb-6">Products</h1>
+        <h1 className="mb-6 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">Products</h1>
         <div className="space-y-2">
           {[...Array(5)].map((_, i) => (
             <Skeleton key={i} className="h-10 w-full" />
@@ -131,7 +131,7 @@ export default function Products() {
   if (products.length === 0) {
     return (
       <div className="p-6">
-        <h1 className="text-3xl font-extrabold tracking-tight text-white mb-6">Products</h1>
+        <h1 className="mb-6 text-2xl font-extrabold tracking-tight text-white sm:text-3xl">Products</h1>
         <div className="p-16 text-center glass rounded-[2.5rem] border border-white/5 shadow-2xl">
           <Package className="size-16 text-teal-100/10 mx-auto mb-6" />
           <p className="text-teal-100/60 italic text-lg font-medium tracking-wide">
@@ -147,7 +147,8 @@ export default function Products() {
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-extrabold tracking-tight text-white">Products</h1>
       </div>
-      <Table>
+      <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
+      <Table className="min-w-[800px]">
         <TableHeader>
           <TableRow>
             <TableHead className="py-2 px-3 text-left">Product</TableHead>
@@ -207,9 +208,10 @@ export default function Products() {
           ))}
         </TableBody>
       </Table>
+      </div>
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="max-w-3xl">
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
           <DialogHeader>
             <DialogTitle>{selectedProduct?.title}</DialogTitle>
             <DialogDescription>
