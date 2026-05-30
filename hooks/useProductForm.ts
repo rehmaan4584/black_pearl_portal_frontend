@@ -30,6 +30,7 @@ type ProductDetailResponse = {
     sizeId: number;
     colorId: number;
     price: number;
+    inventory?: { quantity: number } | null;
     images: { url: string }[];
   }[];
 };
@@ -56,7 +57,9 @@ export function useProductForm(productId?: number) {
       subCategoryId: "",
       gender: "",
       brand: "",
-      variants: [{ id: 0, sizeId: "", colorId: "", price: 0, images: [] }],
+      variants: [
+        { id: 0, sizeId: "", colorId: "", price: 0, stock: 0, images: [] },
+      ],
     },
   });
 
@@ -106,6 +109,7 @@ export function useProductForm(productId?: number) {
           sizeId: String(v.sizeId),
           colorId: String(v.colorId),
           price: v.price,
+          stock: v.inventory?.quantity ?? 0,
           images: v.images.map((img) => img.url),
         })),
       });
@@ -123,7 +127,12 @@ export function useProductForm(productId?: number) {
     formValues.gender &&
     formValues.variants?.length > 0 &&
     formValues.variants.every(
-      (v) => v.sizeId && v.colorId && v.price > 0 && v.images?.length > 0,
+      (v) =>
+        v.sizeId &&
+        v.colorId &&
+        v.price > 0 &&
+        v.stock >= 0 &&
+        v.images?.length > 0,
     );
 
   const onSubmit = async (data: ProductFormData) => {
@@ -140,6 +149,7 @@ export function useProductForm(productId?: number) {
             sizeId: Number(v.sizeId),
             colorId: Number(v.colorId),
             price: v.price,
+            stock: v.stock,
             sku: `SKU-${v.sizeId}-${v.colorId}`,
           })),
         });
@@ -167,6 +177,7 @@ export function useProductForm(productId?: number) {
             sizeId: Number(variant.sizeId),
             colorId: Number(variant.colorId),
             price: variant.price,
+            stock: variant.stock,
           });
 
           await uploadVariantImages(createdVariant.id, variant.images);

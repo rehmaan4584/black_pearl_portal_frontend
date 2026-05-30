@@ -32,6 +32,7 @@ type WatchedVariant = {
   sizeId?: string;
   colorId?: string;
   price?: number;
+  stock?: number;
   images?: string[];
 };
 
@@ -246,7 +247,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                         </div>
                       </CardHeader>
                       <CardContent className="space-y-4">
-                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
 
                           {/* Size */}
                           <div className="space-y-2">
@@ -337,6 +338,25 @@ export default function ProductForm({ productId }: ProductFormProps) {
                                 min: {
                                   value: 1,
                                   message: "Price must be greater than 0",
+                                },
+                              })}
+                            />
+                          </div>
+
+                          {/* Stock */}
+                          <div className="space-y-2">
+                            <Label>
+                              Stock <span className="text-destructive">*</span>
+                            </Label>
+                            <Input
+                              type="number"
+                              placeholder="0"
+                              {...register(`variants.${index}.stock`, {
+                                required: "Stock is required",
+                                valueAsNumber: true,
+                                min: {
+                                  value: 0,
+                                  message: "Stock cannot be negative",
                                 },
                               })}
                             />
@@ -465,6 +485,7 @@ export default function ProductForm({ productId }: ProductFormProps) {
                         sizeId: "",
                         colorId: "",
                         price: 0,
+                        stock: 0,
                         images: [],
                       })
                     }
@@ -517,6 +538,9 @@ export default function ProductForm({ productId }: ProductFormProps) {
                 {formValues.variants?.some(
                   (v: WatchedVariant) => !v.price || v.price <= 0,
                 ) && <li>• Add valid price for all variants</li>}
+                {formValues.variants?.some(
+                  (v: WatchedVariant) => v.stock === undefined || v.stock < 0,
+                ) && <li>• Add valid stock for all variants</li>}
                 {formValues.variants?.some(
                   (v: WatchedVariant) => !v.images || v.images.length === 0,
                 ) && <li>• Upload at least one image for each variant</li>}

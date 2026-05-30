@@ -4,6 +4,7 @@ export type ProductVariantForm = {
   sizeId: string;
   colorId: string;
   price: number;
+  stock: number;
   /** Image URLs (strings) pending upload */
   images: string[];
 };
