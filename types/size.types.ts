@@ -4,3 +4,8 @@ export interface Size {
   displayOrder: number;
 }
 
+export type SizeFormValues = {
+  name: string;
+  displayOrder: number;
+};
+

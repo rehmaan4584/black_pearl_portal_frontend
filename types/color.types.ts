@@ -4,3 +4,8 @@ export interface Color {
   hexCode: string;
 }
 
+export type ColorFormValues = {
+  name: string;
+  hexCode: string;
+};
+

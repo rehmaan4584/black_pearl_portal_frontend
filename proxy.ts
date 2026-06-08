@@ -1,6 +1,13 @@
 import { NextResponse, type NextRequest } from "next/server";
 
-const protectedRoutes = ["/dashboard", "/products", "/categories", "/orders"];
+const protectedRoutes = [
+  "/dashboard",
+  "/products",
+  "/categories",
+  "/sizes",
+  "/colors",
+  "/orders",
+];
 const authRoutes = ["/login", "/register"];
 
 function matchesRoute(pathname: string, routes: string[]) {
@@ -31,6 +38,8 @@ export const config = {
     "/dashboard/:path*",
     "/products/:path*",
     "/categories/:path*",
+    "/sizes/:path*",
+    "/colors/:path*",
     "/orders/:path*",
     "/login",
     "/register",

@@ -19,6 +19,8 @@ function pageTitle(pathname: string | null): string {
   if (pathname.includes("/categories/new")) return "New category";
   if (pathname.includes("/categories/edit")) return "Edit category";
   if (pathname.startsWith("/categories")) return "Categories";
+  if (pathname.startsWith("/sizes")) return "Sizes";
+  if (pathname.startsWith("/colors")) return "Colors";
   if (pathname.startsWith("/orders")) return "Orders";
   return "Dashboard";
 }
