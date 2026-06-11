@@ -1,36 +1,102 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Black Pearl Portal
 
-## Getting Started
+Seller admin panel for **Black Pearl** — manage products, categories, sizes, colors, and customer orders. Changes here appear live on the [customer store](https://github.com/rehmaan4584/black_pearl_store_frontend).
 
-First, run the development server:
+**Live portal:** https://rehman-bp-portal.duckdns.org
+
+## Architecture
+
+```
+Seller  ──►  Portal (this repo)  ──►  Black Pearl API  ──►  Store (buyers see updates)
+```
+
+## Tech stack
+
+- **Next.js 16** (App Router) · React 19 · TypeScript
+- **Tailwind CSS v4** · Radix UI / shadcn-style components
+- **react-hook-form** · **sonner** toasts
+- JWT auth (cookie + `localStorage`, route guard via middleware)
+
+## Features
+
+| Page | Description |
+|------|-------------|
+| Dashboard | Overview with quick links |
+| Products | List, create, edit, delete — variants with size, color, price, stock, images |
+| Categories | CRUD + inline sub-category management |
+| Sizes | CRUD — name, display order (used by product variants) |
+| Colors | CRUD — name, hex code with swatch preview |
+| Orders | View all orders, customer details, line items; mark `PAID` → `SHIPPED` → `DELIVERED` |
+
+**Auth:** Seller register & login. Protected routes redirect to `/login` if no token.
+
+**Product workflow:** Create product → add variants (size + color from lookup tables) → upload images per variant via Cloudinary (handled by API).
+
+## Getting started
+
+### Prerequisites
+
+- Node.js 18+
+- [Black Pearl backend](https://github.com/rehmaan4584/black_pearl_backend) running locally
+
+### Setup
+
+```bash
+git clone https://github.com/rehmaan4584/black_pearl_portal_frontend.git
+cd black_pearl_portal_frontend
+npm install
+```
+
+Create a `.env` file:
+
+```env
+NEXT_PUBLIC_API_URL=http://localhost:3003/
+```
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open **http://localhost:3000** (login required for dashboard routes).
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+> Run store on a different port if both frontends are needed simultaneously (e.g. `next dev -p 3001`).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Scripts
 
-## Learn More
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Dev server (port 3000) |
+| `npm run build` | Production build |
+| `npm run start` | Run production build |
+| `npm run lint` | ESLint |
 
-To learn more about Next.js, take a look at the following resources:
+## Project structure
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+app/
+  (auth)/             # Login, register
+  (dashboard)/        # Products, categories, sizes, colors, orders
+components/
+  layout/             # Sidebar, app shell
+  products/           # ProductForm, variant tabs
+services/             # API service layer (product, category, size, color, order)
+lib/api.ts            # Base fetch + multipart upload helpers
+proxy.ts              # Auth route guard
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## API integration
 
-## Deploy on Vercel
+```
+Page → services/*.service.ts → lib/api.ts → Backend REST API
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Seller-only endpoints use `Authorization: Bearer <token>`. Image uploads use `apiUpload()` (multipart FormData).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Related repos
+
+- [black_pearl_backend](https://github.com/rehmaan4584/black_pearl_backend) — NestJS REST API · [Live](https://rehman-bp-api.duckdns.org/api)
+- [black_pearl_store_frontend](https://github.com/rehmaan4584/black_pearl_store_frontend) — Customer storefront · [Live](https://rehman-bp-store.duckdns.org)
+
+## Author
+
+Abdul Rehman
